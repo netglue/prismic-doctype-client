@@ -38,7 +38,7 @@ repository:
   archived: false
   default_branch: "main"
   delete_branch_on_merge: true
-  description: "A template repository for PHP projects or libraries"
+  description: "A PHP client library for manipulating custom types in prismic content repositories"
   enable_automated_security_fixes: true
   enable_vulnerability_alerts: true
   has_downloads: true
@@ -46,6 +46,6 @@ repository:
   has_pages: false
   has_projects: false
   has_wiki: false
-  name: "php-template-project"
-  private: false
-  topics: "php, template, goats"
+  name: "prismic-doctype-client"
+  private: true
+  topics: "php, prismicio, prismic"

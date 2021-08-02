@@ -1,9 +1,9 @@
 {
-    "name": "gsteel/php-template-project",
+    "name": "netglue/prismic-doctype-client",
     "type": "library",
-    "description": "Template Project Name",
+    "description": "Prismic Custom Type API Client",
     "keywords": [],
-    "homepage": "https://github.com/gsteel/php-template-project",
+    "homepage": "https://github.com/netglue/prismic-doctype-client",
     "license": "MIT",
     "authors": [
         {
@@ -12,7 +12,9 @@
         }
     ],
     "require": {
-        "php": "^7.3 || ~8.0"
+        "php": "^7.3 || ~8.0",
+        "ext-json": "*",
+        "webmozart/assert": "^1.10"
     },
     "require-dev": {
         "doctrine/coding-standard": "^9.0",
@@ -34,13 +36,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Gsteel\\Package\\": "src/"
+            "Prismic\\DocumentType\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Gsteel\\Package\\Test\\Unit\\": "test/Unit",
-            "Gsteel\\Package\\Test\\Integration\\": "test/Integration"
+            "Prismic\\DocumentType\\Test\\Unit\\": "test/Unit",
+            "Prismic\\DocumentType\\Test\\Integration\\": "test/Integration"
         }
     },
     "scripts": {
