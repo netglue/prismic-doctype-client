@@ -1,0 +1,59 @@
+{
+    "name": "gsteel/php-template-project",
+    "type": "library",
+    "description": "Template Project Name",
+    "keywords": [],
+    "homepage": "https://github.com/gsteel/php-template-project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "George Steel",
+            "email": "george@net-glue.co.uk"
+        }
+    ],
+    "require": {
+        "php": "^7.3 || ~8.0"
+    },
+    "require-dev": {
+        "doctrine/coding-standard": "^9.0",
+        "ergebnis/composer-normalize": "^2.15",
+        "infection/infection": "^0.18.2",
+        "phpunit/phpunit": "^9.5",
+        "psalm/plugin-phpunit": "^0.16.1",
+        "roave/security-advisories": "dev-latest",
+        "vimeo/psalm": "^4.8"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "composer-normalize": {
+            "indent-size": 4,
+            "indent-style": "space"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Gsteel\\Package\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Gsteel\\Package\\Test\\Unit\\": "test/Unit",
+            "Gsteel\\Package\\Test\\Integration\\": "test/Integration"
+        }
+    },
+    "scripts": {
+        "check": [
+            "phpcs",
+            "psalm",
+            "phpunit",
+            "infection"
+        ],
+        "clean": [
+            "composer normalize",
+            "psalm --generate-baseline",
+            "phpcbf"
+        ]
+    }
+}

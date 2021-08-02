@@ -1,0 +1,51 @@
+
+branches:
+  - name: "main"
+
+labels:
+  - name: "bug"
+    color: "ee0701"
+    description: "Something bad is happening…"
+
+  - name: "dependency"
+    color: "0366d6"
+    description: "Dependency updates"
+
+  - name: "enhancement"
+    color: "0e8a16"
+    description: "Make it better"
+
+  - name: "merge"
+    color: "6f42c1"
+    description: "Merge this…"
+
+  - name: "question"
+    color: "cc317c"
+    description: ""
+
+  - name: "security"
+    color: "ee0701"
+    description: "Super secret"
+
+  - name: "stale"
+    color: "eeeeee"
+    description: ""
+
+repository:
+  allow_merge_commit: true
+  allow_rebase_merge: true
+  allow_squash_merge: true
+  archived: false
+  default_branch: "main"
+  delete_branch_on_merge: true
+  description: "A template repository for PHP projects or libraries"
+  enable_automated_security_fixes: true
+  enable_vulnerability_alerts: true
+  has_downloads: true
+  has_issues: true
+  has_pages: false
+  has_projects: false
+  has_wiki: false
+  name: "php-template-project"
+  private: false
+  topics: "php, template, goats"
