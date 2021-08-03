@@ -47,7 +47,7 @@ final class Definition implements JsonSerializable
         return new self($id, $label, $repeatable, $active, $json);
     }
 
-    /** @return array{id: string, label: string, repeatable: bool, status: bool, json: string} */
+    /** @return array{id: string, label: string, repeatable: bool, status: bool, json: array<array-key, mixed>} */
     public function jsonSerialize(): array
     {
         return [
@@ -55,7 +55,7 @@ final class Definition implements JsonSerializable
             'label' => $this->label,
             'repeatable' => $this->repeatable,
             'status' => $this->active,
-            'json' => $this->json,
+            'json' => Json::decodeToArray($this->json),
         ];
     }
 
@@ -128,5 +128,18 @@ final class Definition implements JsonSerializable
         $clone->label = $label;
 
         return $clone;
+    }
+
+    public function equals(self $other): bool
+    {
+        return $this->id === $other->id
+            &&
+            $this->label === $other->label
+            &&
+            $this->repeatable === $other->repeatable
+            &&
+            $this->active === $other->active
+            &&
+            $this->json === $other->json;
     }
 }

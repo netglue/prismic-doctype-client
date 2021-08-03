@@ -32,7 +32,7 @@ final class DefinitionTest extends TestCase
             'label' => 'Custom Type',
             'repeatable' => true,
             'status' => true,
-            'json' => '{"Foo":{}}',
+            'json' => ['Foo' => []],
         ];
         self::assertEquals($expect, $this->type->jsonSerialize());
     }
