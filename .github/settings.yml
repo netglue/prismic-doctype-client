@@ -47,5 +47,5 @@ repository:
   has_projects: false
   has_wiki: false
   name: "prismic-doctype-client"
-  private: true
+  private: false
   topics: "php, prismicio, prismic"
