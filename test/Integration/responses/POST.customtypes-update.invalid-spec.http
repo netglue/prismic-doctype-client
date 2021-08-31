@@ -1,0 +1,14 @@
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+Content-Length: 50
+Connection: close
+Date: Tue, 31 Aug 2021 22:39:33 GMT
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Headers: Content-Type,repository,Authorization
+Access-Control-Allow-Methods: OPTIONS,POST,GET
+Access-Control-Allow-Credentials: true
+
+
+Invalid Paths:
+PATH: |0|/json
+VALUE: undefined

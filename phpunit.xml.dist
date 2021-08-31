@@ -12,6 +12,9 @@
         <testsuite name="Integration">
             <directory>test/Integration</directory>
         </testsuite>
+        <testsuite name="Smoke">
+            <directory>test/Smoke</directory>
+        </testsuite>
     </testsuites>
 
     <coverage cacheDirectory=".cache/code-coverage"

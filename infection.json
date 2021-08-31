@@ -7,7 +7,7 @@
     "minMsi": 100,
     "phpUnit": {
     },
-    "testFrameworkOptions": "--testsuite=Unit",
+    "testFrameworkOptions": "--exclude-group=LiveAPI",
     "source": {
         "directories": [
             "src"

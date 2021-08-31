@@ -1,0 +1,11 @@
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 154
+Connection: close
+Date: Fri, 06 Aug 2021 22:36:55 GMT
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Headers: Content-Type,repository,Authorization
+Access-Control-Allow-Methods: OPTIONS,POST,GET
+Access-Control-Allow-Credentials: true
+
+{"id":"example","label":"Example","repeatable":true,"json":{"Main":{"value":{"type":"Number","config":{"label":"Value","min":0,"max":10}}}},"status":true}

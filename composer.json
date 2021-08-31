@@ -52,7 +52,8 @@
     "autoload-dev": {
         "psr-4": {
             "Prismic\\DocumentType\\Test\\Unit\\": "test/Unit",
-            "Prismic\\DocumentType\\Test\\Integration\\": "test/Integration"
+            "Prismic\\DocumentType\\Test\\Integration\\": "test/Integration",
+            "Prismic\\DocumentType\\Test\\Smoke\\": "test/Smoke"
         }
     },
     "scripts": {

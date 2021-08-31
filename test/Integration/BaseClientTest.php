@@ -2,115 +2,283 @@
 
 declare(strict_types=1);
 
-namespace Integration;
+namespace Prismic\DocumentType\Test\Integration;
 
+use Laminas\Diactoros\StreamFactory;
+use Laminas\Diactoros\UriFactory;
+use Prismic\DocumentType\BaseClient;
 use Prismic\DocumentType\Definition;
 use Prismic\DocumentType\Exception\AuthenticationFailed;
 use Prismic\DocumentType\Exception\DefinitionNotFound;
 use Prismic\DocumentType\Exception\InsertFailed;
+use Prismic\DocumentType\Exception\InvalidDefinition;
+use Prismic\DocumentType\Exception\RequestFailure;
+use Prismic\DocumentType\Exception\UnexpectedStatusCode;
 use Prismic\DocumentType\Exception\UpdateFailed;
-use Prismic\DocumentType\Test\Integration\HttpTestCase;
-use Traversable;
+use Psr\Http\Client\ClientExceptionInterface;
+use Psr\Http\Message\RequestInterface;
+use Throwable;
 
+use function assert;
 use function count;
-use function iterator_to_array;
-use function uniqid;
 
-/** @psalm-suppress MissingConstructor */
-final class BaseClientTest extends HttpTestCase
+class BaseClientTest extends MockServerTestCase
 {
-    /** @return array<string, string[]> */
-    public function invalidRepositoryDataProvider(): array
+    private const EXPECTED_REPOSITORY = 'expected-repo-name';
+
+    /** @var BaseClient */
+    private $client;
+
+    protected function setUp(): void
     {
-        return [
-            'Invalid Repo + Invalid Token' => ['foo', 'foo'],
-        ];
+        parent::setUp();
+        $this->client = new BaseClient(
+            MockServer::VALID_TOKEN,
+            self::EXPECTED_REPOSITORY,
+            $this->httpClient(),
+            $this->requestFactory(),
+            new UriFactory(),
+            new StreamFactory(),
+            self::apiServerUri()
+        );
     }
 
-    /** @dataProvider invalidRepositoryDataProvider */
-    public function testThatAuthorisationCanFail(string $repo, string $token): void
+    public function testThatANetworkErrorWillBeWrappedInARequestFailureException(): void
     {
-        $client = $this->client->withAlternativeRepository($repo, $token);
-        $this->expectException(AuthenticationFailed::class);
-        $client->getDefinition('foo');
-    }
-
-    public function testGetDefinitionWillThrownDefinitionNotFound(): void
-    {
-        $id = uniqid('missing_', false);
-        $this->expectException(DefinitionNotFound::class);
-        $this->expectExceptionMessage($id);
-        $this->client->getDefinition($id);
-    }
-
-    public function testThatAllTypesCanBeRetrieved(): void
-    {
-        $types = $this->client->fetchAllDefinitions();
-        $array = $types instanceof Traversable ? iterator_to_array($types) : $types;
-        self::assertContainsOnlyInstancesOf(Definition::class, $array);
-        self::assertGreaterThanOrEqual(1, count($array));
-    }
-
-    public function testThatANewDefinitionCanBeSaved(): Definition
-    {
-        $definition = Definition::new(
-            uniqid('new_', false),
-            'Example Definition',
-            true,
-            true,
-            '{"Main":{"value": {"type":"Number","config":{"label":"Value","min":0,"max":10}}}}'
+        $client = new BaseClient(
+            'whatever',
+            'anything',
+            $this->httpClient(),
+            $this->requestFactory(),
+            new UriFactory(),
+            new StreamFactory(),
+            'http://192.0.2.1'
         );
 
-        $this->client->createDefinition($definition);
-
-        $fetched = $this->client->getDefinition($definition->id());
-
-        self::assertEquals($definition->id(), $fetched->id());
-        self::assertEquals($definition->label(), $fetched->label());
-        self::assertEquals($definition->isRepeatable(), $fetched->isRepeatable());
-        self::assertEquals($definition->isActive(), $fetched->isActive());
-
-        return $fetched;
+        try {
+            $client->getDefinition('whatever');
+            $this->fail('No exception was thrown');
+        } catch (RequestFailure $error) {
+            self::assertInstanceOf(ClientExceptionInterface::class, $error->getPrevious());
+        } catch (Throwable $error) {
+            $this->fail('Unexpected exception type');
+        }
     }
 
-    /** @depends testThatANewDefinitionCanBeSaved */
-    public function testThatAttemptingToInsertAnExistingDefinitionIsExceptional(Definition $definition): void
+    public function testFetchAllDefinitionsYieldsAnIterableOfDefinitions(): void
+    {
+        $definitions = $this->client->fetchAllDefinitions();
+        self::assertGreaterThan(0, count($definitions));
+        self::assertContainsOnlyInstancesOf(Definition::class, $definitions);
+    }
+
+    public function testASingleDefinitionCanBeRetrieved(): void
+    {
+        $definition = $this->client->getDefinition('example');
+        self::assertEquals('example', $definition->id());
+    }
+
+    public function testAnExceptionIsThrownWhenTheDefinitionIsNotFound(): void
+    {
+        $this->expectException(DefinitionNotFound::class);
+        $this->client->getDefinition('not-found');
+    }
+
+    public function testValidInsertCausesNoExceptions(): void
+    {
+        $this->expectNotToPerformAssertions();
+        $this->client->createDefinition(Definition::new(
+            'not-found',
+            'Foo',
+            true,
+            true,
+            '{"foo":"bar"}'
+        ));
+    }
+
+    public function testThatAnExceptionIsThrownInsertingADefinitionWithAnInvalidSpec(): void
+    {
+        $this->expectException(InvalidDefinition::class);
+        $this->client->createDefinition(Definition::new(
+            'invalid-insert',
+            'Foo',
+            true,
+            true,
+            '{"foo":"bar"}'
+        ));
+    }
+
+    public function testThatAnExceptionIsThrownInsertingADuplicateDefinition(): void
     {
         $this->expectException(InsertFailed::class);
-        $this->expectExceptionMessage($definition->id());
-        $this->client->createDefinition($definition);
+        $this->client->createDefinition(Definition::new(
+            'duplicate-insert',
+            'Foo',
+            true,
+            true,
+            '{"foo":"bar"}'
+        ));
     }
 
-    /** @depends testThatANewDefinitionCanBeSaved */
-    public function testThatADefinitionCanBeDisabled(Definition $definition): Definition
+    public function testUnexpectedStatusCodeDuringInsertWhenResponseCodeIsNotExpected(): void
     {
-        $update = $definition->withActivationStatus(false);
-        self::assertTrue($definition->isActive());
-        self::assertFalse($update->isActive());
-        $this->client->updateDefinition($update);
-
-        $fetched = $this->client->getDefinition($definition->id());
-        self::assertFalse($fetched->isActive());
-
-        return $fetched;
+        $this->expectException(UnexpectedStatusCode::class);
+        $this->client->createDefinition(Definition::new(
+            'no-existing-matches',
+            'In Mock Server',
+            true,
+            true,
+            '{"causes":"a 500 error"}'
+        ));
     }
 
-    /** @depends testThatADefinitionCanBeDisabled */
-    public function testThatADefinitionCanBeDeleted(Definition $definition): void
+    public function testSuccessfulDeleteDoesNotCauseAnError(): void
     {
-        $this->client->deleteDefinition($definition->id());
-        $this->expectException(DefinitionNotFound::class);
-        $this->client->getDefinition($definition->id());
+        $this->client->deleteDefinition('not-found');
+
+        $last = $this->httpClient()->lastRequest();
+        assert($last instanceof RequestInterface);
+        self::assertStringContainsString('/not-found', $last->getUri()->getPath());
+    }
+
+    public function testDeleteWillThrowUnexpectedStatusCodeInOtherSituations(): void
+    {
+        $this->expectException(UnexpectedStatusCode::class);
+        $this->client->deleteDefinition('will-be-a-500');
+    }
+
+    public function testAValidUpdateWillCauseNoExceptions(): void
+    {
+        $this->expectNotToPerformAssertions();
+        $this->client->updateDefinition(Definition::new(
+            'example',
+            'Foo',
+            true,
+            true,
+            '{"foo":"bar"}'
+        ));
+    }
+
+    public function testUpdateForTypeNotFoundIsExceptional(): void
+    {
+        $this->expectException(UpdateFailed::class);
+        $this->client->updateDefinition(Definition::new(
+            'not-found-for-update',
+            'Foo',
+            true,
+            true,
+            '{"foo":"bar"}'
+        ));
+    }
+
+    public function testAnExceptionIsThrownDuringUpdateWithAnInvalidSpec(): void
+    {
+        $this->expectException(InvalidDefinition::class);
+        $this->client->updateDefinition(Definition::new(
+            'invalid-spec',
+            'Foo',
+            true,
+            true,
+            '{"foo":"bar"}'
+        ));
+    }
+
+    public function testUnexpectedStatusCodeDuringUpdateWhenResponseCodeIsNotExpected(): void
+    {
+        $this->expectException(UnexpectedStatusCode::class);
+        $this->client->updateDefinition(Definition::new(
+            'no-existing-matches',
+            'In Mock Server',
+            true,
+            true,
+            '{"causes":"a 500 error"}'
+        ));
+    }
+
+    public function testRemote401ThrowsException(): void
+    {
+        $this->expectException(AuthenticationFailed::class);
+        $this->client->getDefinition('401');
+    }
+
+    public function testRemote403ThrowsException(): void
+    {
+        $this->expectException(AuthenticationFailed::class);
+        $this->client->getDefinition('403');
     }
 
     /**
-     * @depends testThatADefinitionCanBeDisabled
-     * @depends testThatADefinitionCanBeDeleted
+     * @depends testASingleDefinitionCanBeRetrieved
+     * @depends testAValidUpdateWillCauseNoExceptions
      */
-    public function testThatYouCannotUpdateADefinitionThatDoesNotExist(Definition $definition): void
+    public function testThatWhenTheTypeExistsAnUpdateWillBeIssuedInSave(): void
     {
-        $this->expectException(UpdateFailed::class);
-        $this->expectExceptionMessage($definition->id());
-        $this->client->updateDefinition($definition);
+        $this->client->saveDefinition(Definition::new(
+            'example',
+            'Foo',
+            true,
+            true,
+            '{"foo":"bar"}'
+        ));
+
+        $last = $this->httpClient()->lastRequest();
+        assert($last instanceof RequestInterface);
+        self::assertStringContainsString('/update', $last->getUri()->getPath());
+    }
+
+    public function testThatWhenTheCurrentDefinitionIsIdenticalNoUpdateWillBeIssuedInSave(): void
+    {
+        $this->client->saveDefinition(Definition::new(
+            'example',
+            'Example',
+            true,
+            true,
+            '{"Main":{"value":{"type":"Number","config":{"label":"Value","min":0,"max":10}}}}'
+        ));
+
+        $last = $this->httpClient()->lastRequest();
+        assert($last instanceof RequestInterface);
+        self::assertStringContainsString('/customtypes/example', $last->getUri()->getPath());
+    }
+
+    /**
+     * @depends testAnExceptionIsThrownWhenTheDefinitionIsNotFound
+     * @depends testValidInsertCausesNoExceptions
+     */
+    public function testThatSaveWillCatchNotFoundErrorsAndPerformAnInsert(): void
+    {
+        $this->client->saveDefinition(Definition::new(
+            'not-found',
+            'Example',
+            true,
+            true,
+            '{"foo":"bar"}'
+        ));
+
+        $last = $this->httpClient()->lastRequest();
+        assert($last instanceof RequestInterface);
+        self::assertStringContainsString('/customtypes/insert', $last->getUri()->getPath());
+    }
+
+    /** @depends testASingleDefinitionCanBeRetrieved */
+    public function testThatTheRepositoryHeaderIsSetInTheRequest(): void
+    {
+        $this->client->getDefinition('example');
+
+        $last = $this->httpClient()->lastRequest();
+        assert($last instanceof RequestInterface);
+        $header = $last->getHeaderLine('repository');
+        self::assertStringContainsString(self::EXPECTED_REPOSITORY, $header);
+    }
+
+    /** @depends testThatTheRepositoryHeaderIsSetInTheRequest */
+    public function testThatAClientCanBeGeneratedForADifferentRepository(): void
+    {
+        $other = $this->client->withAlternativeRepository('new-repository', MockServer::VALID_TOKEN);
+        $other->getDefinition('example');
+        $last = $this->httpClient()->lastRequest();
+        assert($last instanceof RequestInterface);
+        $header = $last->getHeaderLine('repository');
+        self::assertStringContainsString('new-repository', $header);
     }
 }

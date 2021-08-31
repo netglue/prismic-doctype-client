@@ -1,0 +1,9 @@
+HTTP/1.1 401 Unauthorized
+Content-Type: application/json
+Content-Length: 26
+Connection: close
+Date: Tue, 03 Aug 2021 21:36:30 GMT
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Headers: *
+
+{"message":"Unauthorized"}

@@ -71,11 +71,11 @@ class JsonTest extends TestCase
     {
         $inputArray = ['foo' => 'foo'];
 
-        for ($i = 0; $i < 550; $i++) {
+        for ($i = 1; $i < 512; $i++) {
             $inputArray['foo'] = $inputArray;
         }
 
-        $json = json_encode($inputArray, JSON_THROW_ON_ERROR, 551);
+        $json = json_encode($inputArray, JSON_THROW_ON_ERROR, 513);
 
         $this->expectException(JsonError::class);
         $this->expectExceptionCode(JSON_ERROR_DEPTH);
@@ -85,8 +85,13 @@ class JsonTest extends TestCase
 
     public function testMaxDepthNotExceeded(): void
     {
-        $inputArray = ['foo' => ['foo' => ['foo' => ['foo']]]];
-        $json = json_encode($inputArray, JSON_THROW_ON_ERROR);
+        $inputArray = ['foo' => 'foo'];
+
+        for ($i = 1; $i < 511; $i++) {
+            $inputArray['foo'] = $inputArray;
+        }
+
+        $json = json_encode($inputArray, JSON_THROW_ON_ERROR, 513);
 
         self::assertEquals($inputArray, Json::decodeToArray($json));
     }
