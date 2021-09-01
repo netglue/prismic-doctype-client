@@ -74,12 +74,11 @@ final class BaseClient implements Client
 
     public function getDefinition(string $id): Definition
     {
-        $response = $this->send(
-            $this->request('GET', sprintf('/customtypes/%s', $id))
-        );
+        $request = $this->request('GET', sprintf('/customtypes/%s', $id));
+        $response = $this->send($request);
 
         if ($response->getStatusCode() === 404) {
-            throw DefinitionNotFound::withIdentifier($id);
+            throw DefinitionNotFound::withIdentifier($id, $request, $response);
         }
 
         $body = Json::decodeToArray((string) $response->getBody());
