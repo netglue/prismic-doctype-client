@@ -96,6 +96,7 @@ final class BaseClient implements Client
         $body = Json::decodeToArray((string) $response->getBody());
         $list = [];
         foreach ($body as $item) {
+            Assert::isArray($item);
             $definition = Definition::fromArray($item);
             $list[$definition->id()] = $definition;
         }
