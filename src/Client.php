@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Prismic\DocumentType;
 
+use Countable;
 use Prismic\DocumentType\Exception\DefinitionNotFound;
 use Prismic\DocumentType\Exception\Exception;
 
@@ -27,7 +28,7 @@ interface Client
     /**
      * Fetch all definitions known to the repository
      *
-     * @return iterable<Definition>
+     * @return iterable<Definition>&Countable
      *
      * @throws Exception if any errors occur communicating with the remote API.
      */
