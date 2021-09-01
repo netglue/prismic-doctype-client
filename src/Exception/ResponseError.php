@@ -13,9 +13,9 @@ use Throwable;
 abstract class ResponseError extends RuntimeException implements Exception
 {
     /** @var RequestInterface|null */
-    protected $request = null;
+    protected $request;
     /** @var ResponseInterface|null */
-    protected $response = null;
+    protected $response;
 
     final public function __construct(string $message, int $code, ?Throwable $previous = null) // phpcs:ignore
     {
