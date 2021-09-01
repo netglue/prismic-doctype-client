@@ -47,6 +47,31 @@ final class Definition implements JsonSerializable
         return new self($id, $label, $repeatable, $active, $json);
     }
 
+    /** @param array<array-key, mixed> $data */
+    public static function fromArray(array $data): self
+    {
+        $expect = ['id', 'label', 'repeatable', 'status', 'json'];
+        foreach ($expect as $key) {
+            Assert::keyExists($data, $key);
+        }
+
+        Assert::string($data['id']);
+        Assert::notEmpty($data['id']);
+        Assert::string($data['label']);
+        Assert::notEmpty($data['label']);
+        Assert::isArray($data['json']);
+        Assert::boolean($data['repeatable']);
+        Assert::boolean($data['status']);
+
+        return self::new(
+            $data['id'],
+            $data['label'],
+            $data['repeatable'],
+            $data['status'],
+            Json::encodeArray($data['json'])
+        );
+    }
+
     /** @return array{id: string, label: string, repeatable: bool, status: bool, json: array<array-key, mixed>} */
     public function jsonSerialize(): array
     {

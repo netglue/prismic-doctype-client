@@ -83,7 +83,7 @@ final class BaseClient implements Client
 
         $body = Json::decodeToArray((string) $response->getBody());
 
-        return $this->definitionFromArray($body);
+        return Definition::fromArray($body);
     }
 
     /** @inheritDoc */
@@ -96,8 +96,7 @@ final class BaseClient implements Client
         $body = Json::decodeToArray((string) $response->getBody());
         $list = [];
         foreach ($body as $item) {
-            Assert::isArray($item);
-            $definition = $this->definitionFromArray($item);
+            $definition = Definition::fromArray($item);
             $list[$definition->id()] = $definition;
         }
 
@@ -208,28 +207,5 @@ final class BaseClient implements Client
         }
 
         return $response;
-    }
-
-    /** @param array<array-key, mixed> $data */
-    private function definitionFromArray(array $data): Definition
-    {
-        $expect = ['id', 'label', 'repeatable', 'status', 'json'];
-        foreach ($expect as $key) {
-            Assert::keyExists($data, $key);
-        }
-
-        Assert::string($data['id']);
-        Assert::string($data['label']);
-        Assert::isArray($data['json']);
-        Assert::boolean($data['repeatable']);
-        Assert::boolean($data['status']);
-
-        return Definition::new(
-            $data['id'],
-            $data['label'],
-            $data['repeatable'],
-            $data['status'],
-            Json::encodeArray($data['json'])
-        );
     }
 }
