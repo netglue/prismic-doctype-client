@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Prismic\DocumentType\Test\Unit;
 
+use JsonSerializable;
 use PHPUnit\Framework\TestCase;
 use Prismic\DocumentType\Exception\AssertionFailed;
 use Prismic\DocumentType\Exception\JsonError;
@@ -67,13 +68,21 @@ class JsonTest extends TestCase
         self::assertEquals($expect, Json::decodeToArray('{"foo":"bar", "num": 1}'));
     }
 
-    public function testMaxDepthExceeded(): void
+    /** @return array<string, mixed> */
+    private function arrayWithDepth(int $depth): array
     {
         $inputArray = ['foo' => 'foo'];
 
-        for ($i = 1; $i < 512; $i++) {
+        for ($i = 1; $i < $depth; $i++) {
             $inputArray['foo'] = $inputArray;
         }
+
+        return $inputArray;
+    }
+
+    public function testMaxDepthExceeded(): void
+    {
+        $inputArray = $this->arrayWithDepth(512);
 
         $json = json_encode($inputArray, JSON_THROW_ON_ERROR, 513);
 
@@ -85,14 +94,21 @@ class JsonTest extends TestCase
 
     public function testMaxDepthNotExceeded(): void
     {
-        $inputArray = ['foo' => 'foo'];
-
-        for ($i = 1; $i < 511; $i++) {
-            $inputArray['foo'] = $inputArray;
-        }
+        $inputArray = $this->arrayWithDepth(511);
 
         $json = json_encode($inputArray, JSON_THROW_ON_ERROR, 513);
 
         self::assertEquals($inputArray, Json::decodeToArray($json));
+    }
+
+    public function testAnExceptionIsThrownEncodingAnInvalidObject(): void
+    {
+        $mock = $this->createMock(JsonSerializable::class);
+        $mock->expects(self::once())
+            ->method('jsonSerialize')
+            ->willReturn($this->arrayWithDepth(513));
+
+        $this->expectException(JsonError::class);
+        Json::encodeObject($mock);
     }
 }
