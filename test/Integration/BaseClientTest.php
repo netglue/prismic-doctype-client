@@ -92,6 +92,9 @@ class BaseClientTest extends MockServerTestCase
         $definitions = $this->client->fetchAllDefinitions();
         self::assertGreaterThan(0, count($definitions));
         self::assertContainsOnlyInstancesOf(Definition::class, $definitions);
+        foreach ($definitions as $key => $definition) {
+            self::assertEquals($definition->id(), $key);
+        }
     }
 
     public function testASingleDefinitionCanBeRetrieved(): void

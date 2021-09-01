@@ -28,7 +28,7 @@ interface Client
     /**
      * Fetch all definitions known to the repository
      *
-     * @return iterable<Definition>&Countable
+     * @return iterable<string, Definition>&Countable
      *
      * @throws Exception if any errors occur communicating with the remote API.
      */
