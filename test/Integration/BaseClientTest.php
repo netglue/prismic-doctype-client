@@ -13,11 +13,11 @@ use Prismic\DocumentType\Exception\DefinitionNotFound;
 use Prismic\DocumentType\Exception\InsertFailed;
 use Prismic\DocumentType\Exception\InvalidDefinition;
 use Prismic\DocumentType\Exception\RequestFailure;
+use Prismic\DocumentType\Exception\ResponseError;
 use Prismic\DocumentType\Exception\UnexpectedStatusCode;
 use Prismic\DocumentType\Exception\UpdateFailed;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\RequestInterface;
-use Throwable;
 
 use function assert;
 use function count;
@@ -43,6 +43,22 @@ class BaseClientTest extends MockServerTestCase
         );
     }
 
+    protected function assertExceptionContainsReferenceToTheLastErroneousRequest(ResponseError $error): void
+    {
+        $lastRequest = $this->httpClient()->lastRequest();
+        self::assertInstanceOf(RequestInterface::class, $lastRequest, 'The HTTP client has not issued any requests');
+        self::assertSame($lastRequest, $error->request(), 'The request referenced in the error does not match the last request issued by the HTTP client');
+    }
+
+    protected function assertExceptionHasResponseWithMatchingHttpStatusCode(ResponseError $error): void
+    {
+        self::assertEquals(
+            $error->response()->getStatusCode(),
+            $error->getCode(),
+            'The error code does not match the response status code'
+        );
+    }
+
     public function testThatANetworkErrorWillBeWrappedInARequestFailureException(): void
     {
         $client = new BaseClient(
@@ -55,13 +71,19 @@ class BaseClientTest extends MockServerTestCase
             'http://192.0.2.1'
         );
 
+        $this->expectException(RequestFailure::class);
+        $this->expectExceptionCode(0);
+        $this->expectExceptionMessage('The request to "/customtypes/whatever" failed');
+
         try {
             $client->getDefinition('whatever');
-            $this->fail('No exception was thrown');
         } catch (RequestFailure $error) {
             self::assertInstanceOf(ClientExceptionInterface::class, $error->getPrevious());
-        } catch (Throwable $error) {
-            $this->fail('Unexpected exception type');
+            $lastRequest = $this->httpClient()->lastRequest();
+            assert($lastRequest instanceof RequestInterface);
+            self::assertSame($lastRequest, $error->failedRequest());
+
+            throw $error;
         }
     }
 
@@ -81,12 +103,20 @@ class BaseClientTest extends MockServerTestCase
     public function testAnExceptionIsThrownWhenTheDefinitionIsNotFound(): void
     {
         $this->expectException(DefinitionNotFound::class);
-        $this->client->getDefinition('not-found');
+        $this->expectExceptionCode(404);
+        $this->expectExceptionMessage('A custom type with the id "not-found" cannot be found');
+        try {
+            $this->client->getDefinition('not-found');
+        } catch (DefinitionNotFound $error) {
+            $this->assertExceptionContainsReferenceToTheLastErroneousRequest($error);
+            $this->assertExceptionHasResponseWithMatchingHttpStatusCode($error);
+
+            throw $error;
+        }
     }
 
     public function testValidInsertCausesNoExceptions(): void
     {
-        $this->expectNotToPerformAssertions();
         $this->client->createDefinition(Definition::new(
             'not-found',
             'Foo',
@@ -94,42 +124,73 @@ class BaseClientTest extends MockServerTestCase
             true,
             '{"foo":"bar"}'
         ));
+
+        $last = $this->httpClient()->lastRequest();
+        assert($last instanceof RequestInterface);
+        self::assertStringContainsString('/insert', $last->getUri()->getPath());
     }
 
     public function testThatAnExceptionIsThrownInsertingADefinitionWithAnInvalidSpec(): void
     {
         $this->expectException(InvalidDefinition::class);
-        $this->client->createDefinition(Definition::new(
-            'invalid-insert',
-            'Foo',
-            true,
-            true,
-            '{"foo":"bar"}'
-        ));
+        $this->expectExceptionMessage('The document type definition was rejected');
+        $this->expectExceptionCode(400);
+        try {
+            $this->client->createDefinition(Definition::new(
+                'invalid-insert',
+                'Foo',
+                true,
+                true,
+                '{"foo":"bar"}'
+            ));
+        } catch (InvalidDefinition $error) {
+            $this->assertExceptionContainsReferenceToTheLastErroneousRequest($error);
+            $this->assertExceptionHasResponseWithMatchingHttpStatusCode($error);
+
+            throw $error;
+        }
     }
 
     public function testThatAnExceptionIsThrownInsertingADuplicateDefinition(): void
     {
         $this->expectException(InsertFailed::class);
-        $this->client->createDefinition(Definition::new(
-            'duplicate-insert',
-            'Foo',
-            true,
-            true,
-            '{"foo":"bar"}'
-        ));
+        $this->expectExceptionMessage('Failed to insert the definition "duplicate-insert" because one already exists with that identifier');
+        $this->expectExceptionCode(409);
+        try {
+            $this->client->createDefinition(Definition::new(
+                'duplicate-insert',
+                'Foo',
+                true,
+                true,
+                '{"foo":"bar"}'
+            ));
+        } catch (InsertFailed $error) {
+            $this->assertExceptionContainsReferenceToTheLastErroneousRequest($error);
+            $this->assertExceptionHasResponseWithMatchingHttpStatusCode($error);
+
+            throw $error;
+        }
     }
 
     public function testUnexpectedStatusCodeDuringInsertWhenResponseCodeIsNotExpected(): void
     {
         $this->expectException(UnexpectedStatusCode::class);
-        $this->client->createDefinition(Definition::new(
-            'no-existing-matches',
-            'In Mock Server',
-            true,
-            true,
-            '{"causes":"a 500 error"}'
-        ));
+        $this->expectExceptionMessage('Expected the HTTP response code 201 but received 500');
+        $this->expectExceptionCode(500);
+        try {
+            $this->client->createDefinition(Definition::new(
+                'no-existing-matches',
+                'In Mock Server',
+                true,
+                true,
+                '{"causes":"a 500 error"}'
+            ));
+        } catch (UnexpectedStatusCode $error) {
+            $this->assertExceptionContainsReferenceToTheLastErroneousRequest($error);
+            $this->assertExceptionHasResponseWithMatchingHttpStatusCode($error);
+
+            throw $error;
+        }
     }
 
     public function testSuccessfulDeleteDoesNotCauseAnError(): void
@@ -144,12 +205,20 @@ class BaseClientTest extends MockServerTestCase
     public function testDeleteWillThrowUnexpectedStatusCodeInOtherSituations(): void
     {
         $this->expectException(UnexpectedStatusCode::class);
-        $this->client->deleteDefinition('will-be-a-500');
+        $this->expectExceptionMessage('Expected the HTTP response code 204 but received 500');
+        $this->expectExceptionCode(500);
+        try {
+            $this->client->deleteDefinition('will-be-a-500');
+        } catch (UnexpectedStatusCode $error) {
+            $this->assertExceptionContainsReferenceToTheLastErroneousRequest($error);
+            $this->assertExceptionHasResponseWithMatchingHttpStatusCode($error);
+
+            throw $error;
+        }
     }
 
     public function testAValidUpdateWillCauseNoExceptions(): void
     {
-        $this->expectNotToPerformAssertions();
         $this->client->updateDefinition(Definition::new(
             'example',
             'Foo',
@@ -157,54 +226,103 @@ class BaseClientTest extends MockServerTestCase
             true,
             '{"foo":"bar"}'
         ));
+
+        $last = $this->httpClient()->lastRequest();
+        assert($last instanceof RequestInterface);
+        self::assertStringContainsString('/update', $last->getUri()->getPath());
     }
 
     public function testUpdateForTypeNotFoundIsExceptional(): void
     {
         $this->expectException(UpdateFailed::class);
-        $this->client->updateDefinition(Definition::new(
-            'not-found-for-update',
-            'Foo',
-            true,
-            true,
-            '{"foo":"bar"}'
-        ));
+        $this->expectExceptionMessage('Failed to update the definition "not-found-for-update" because it has not yet been created');
+        $this->expectExceptionCode(422);
+        try {
+            $this->client->updateDefinition(Definition::new(
+                'not-found-for-update',
+                'Foo',
+                true,
+                true,
+                '{"foo":"bar"}'
+            ));
+        } catch (UpdateFailed $error) {
+            $this->assertExceptionContainsReferenceToTheLastErroneousRequest($error);
+            $this->assertExceptionHasResponseWithMatchingHttpStatusCode($error);
+
+            throw $error;
+        }
     }
 
     public function testAnExceptionIsThrownDuringUpdateWithAnInvalidSpec(): void
     {
         $this->expectException(InvalidDefinition::class);
-        $this->client->updateDefinition(Definition::new(
-            'invalid-spec',
-            'Foo',
-            true,
-            true,
-            '{"foo":"bar"}'
-        ));
+        $this->expectExceptionMessage('The document type definition was rejected');
+        $this->expectExceptionCode(400);
+        try {
+            $this->client->updateDefinition(Definition::new(
+                'invalid-spec',
+                'Foo',
+                true,
+                true,
+                '{"foo":"bar"}'
+            ));
+        } catch (InvalidDefinition $error) {
+            $this->assertExceptionContainsReferenceToTheLastErroneousRequest($error);
+            $this->assertExceptionHasResponseWithMatchingHttpStatusCode($error);
+
+            throw $error;
+        }
     }
 
     public function testUnexpectedStatusCodeDuringUpdateWhenResponseCodeIsNotExpected(): void
     {
         $this->expectException(UnexpectedStatusCode::class);
-        $this->client->updateDefinition(Definition::new(
-            'no-existing-matches',
-            'In Mock Server',
-            true,
-            true,
-            '{"causes":"a 500 error"}'
-        ));
+        $this->expectExceptionMessage('Expected the HTTP response code 204 but received 500');
+        $this->expectExceptionCode(500);
+        try {
+            $this->client->updateDefinition(Definition::new(
+                'no-existing-matches',
+                'In Mock Server',
+                true,
+                true,
+                '{"causes":"a 500 error"}'
+            ));
+        } catch (InvalidDefinition $error) {
+            $this->assertExceptionContainsReferenceToTheLastErroneousRequest($error);
+            $this->assertExceptionHasResponseWithMatchingHttpStatusCode($error);
+
+            throw $error;
+        }
     }
 
     public function testRemote401ThrowsException(): void
     {
         $this->expectException(AuthenticationFailed::class);
-        $this->client->getDefinition('401');
+        $this->expectExceptionMessage('Authentication failed');
+        $this->expectExceptionCode(401);
+        try {
+            $this->client->getDefinition('401');
+        } catch (AuthenticationFailed $error) {
+            $this->assertExceptionContainsReferenceToTheLastErroneousRequest($error);
+            $this->assertExceptionHasResponseWithMatchingHttpStatusCode($error);
+
+            throw $error;
+        }
     }
 
     public function testRemote403ThrowsException(): void
     {
         $this->expectException(AuthenticationFailed::class);
-        $this->client->getDefinition('403');
+        $this->expectExceptionMessage('Authentication failed');
+        $this->expectExceptionCode(403);
+        try {
+            $this->client->getDefinition('403');
+        } catch (AuthenticationFailed $error) {
+            $this->assertExceptionContainsReferenceToTheLastErroneousRequest($error);
+            $this->assertExceptionHasResponseWithMatchingHttpStatusCode($error);
+
+            throw $error;
+        }
     }
 
     /**
