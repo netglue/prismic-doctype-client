@@ -48,4 +48,4 @@ repository:
   has_wiki: false
   name: "prismic-doctype-client"
   private: false
-  topics: "php, prismicio, prismic"
+  topics: "php, prismicio, prismic, hacktoberfest"
