@@ -3,8 +3,8 @@
     "logs": {
         "text": "build/infection/infection-log.txt"
     },
-    "minCoveredMsi": 99,
-    "minMsi": 99,
+    "minCoveredMsi": 95,
+    "minMsi": 95,
     "phpUnit": {
     },
     "testFrameworkOptions": "--exclude-group=LiveAPI",
