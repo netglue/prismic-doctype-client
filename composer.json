@@ -37,7 +37,12 @@
         "vimeo/psalm": "^4.10"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "infection/extension-installer": true,
+            "ergebnis/composer-normalize": true
+        }
     },
     "extra": {
         "composer-normalize": {
