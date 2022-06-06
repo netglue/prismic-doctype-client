@@ -6,6 +6,10 @@ on:
     branches:
       - main
 
+env:
+  default_php: "8.1"
+  php_extensions: ""
+
 jobs:
   matrix:
     name: Generate job matrix
@@ -31,3 +35,31 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
           job: ${{ matrix.job }}
+
+  composer-require-checker:
+    name: "Check for missing dependencies"
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3
+
+      - name: "Install PHP"
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.default_php }}
+          ini-values: memory_limit=-1
+          extensions: ${{ env.php_extensions }}
+
+      - uses: "ramsey/composer-install@2.1.0"
+        with:
+          dependency-versions: "highest"
+
+      - name: "Set global composer bin-dir"
+        run: composer global config bin-dir /usr/local/bin
+
+      - name: "Install require checker"
+        run: composer global require maglnet/composer-require-checker
+
+      - name: "Check"
+        run: /usr/local/bin/composer-require-checker check
