@@ -29,7 +29,7 @@
         "laminas/laminas-diactoros": "^2.8",
         "php-http/curl-client": "^2.2",
         "phpunit/phpunit": "^9.5.10",
-        "psalm/plugin-phpunit": "^0.16.1",
+        "psalm/plugin-phpunit": "^0.16.1 || ^0.17.0",
         "react/child-process": "^0.6.3",
         "react/http": "^1.5",
         "roave/security-advisories": "dev-latest",
