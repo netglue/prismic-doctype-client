@@ -14,7 +14,7 @@ final class AuthenticationFailed extends ResponseError
         return self::withHttpExchange(
             'Authentication failed. This could mean a missing or invalid token, or an incorrect repository',
             $request,
-            $response
+            $response,
         );
     }
 }

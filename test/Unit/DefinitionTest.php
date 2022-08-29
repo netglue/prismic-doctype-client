@@ -25,7 +25,7 @@ final class DefinitionTest extends TestCase
             'Custom Type',
             true,
             true,
-            '{"Foo":{}}'
+            '{"Foo":{}}',
         );
     }
 

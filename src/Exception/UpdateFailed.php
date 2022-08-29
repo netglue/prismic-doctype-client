@@ -20,10 +20,10 @@ final class UpdateFailed extends ResponseError
         return self::withHttpExchange(
             sprintf(
                 'Failed to update the definition "%s" because it has not yet been created',
-                $definition->id()
+                $definition->id(),
             ),
             $request,
-            $response
+            $response,
         );
     }
 }

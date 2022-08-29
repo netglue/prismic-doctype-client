@@ -14,7 +14,7 @@ final class InvalidDefinition extends ResponseError
         return self::withHttpExchange(
             'The document type definition was rejected because it (most likely) has validation errors',
             $request,
-            $response
+            $response,
         );
     }
 }

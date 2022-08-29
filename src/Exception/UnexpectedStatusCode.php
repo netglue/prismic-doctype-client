@@ -17,10 +17,10 @@ final class UnexpectedStatusCode extends ResponseError
             sprintf(
                 'Expected the HTTP response code %d but received %d',
                 $code,
-                $response->getStatusCode()
+                $response->getStatusCode(),
             ),
             $request,
-            $response
+            $response,
         );
     }
 }

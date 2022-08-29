@@ -51,7 +51,7 @@ final class BaseClientTest extends TestCase
             Psr18ClientDiscovery::find(),
             Psr17FactoryDiscovery::findRequestFactory(),
             Psr17FactoryDiscovery::findUriFactory(),
-            Psr17FactoryDiscovery::findStreamFactory()
+            Psr17FactoryDiscovery::findStreamFactory(),
         );
     }
 
@@ -91,7 +91,7 @@ final class BaseClientTest extends TestCase
             'Example Definition',
             true,
             true,
-            '{"Main":{"value": {"type":"Number","config":{"label":"Value","min":0,"max":10}}}}'
+            '{"Main":{"value": {"type":"Number","config":{"label":"Value","min":0,"max":10}}}}',
         );
     }
 
@@ -175,7 +175,7 @@ final class BaseClientTest extends TestCase
             'Invalid Definition',
             true,
             true,
-            '{"Main":{"actually": "valid json, but invalid spec for Prismic"}}'
+            '{"Main":{"actually": "valid json, but invalid spec for Prismic"}}',
         );
 
         $this->expectException(InvalidDefinition::class);

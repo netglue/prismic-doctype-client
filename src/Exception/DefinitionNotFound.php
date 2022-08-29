@@ -19,7 +19,7 @@ final class DefinitionNotFound extends ResponseError
         return self::withHttpExchange(
             sprintf('A custom type with the id "%s" cannot be found', $id),
             $request,
-            $response
+            $response,
         );
     }
 }

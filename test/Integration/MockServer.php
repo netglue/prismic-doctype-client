@@ -31,9 +31,9 @@ final class MockServer
 
     public function __construct(int $port)
     {
-        $this->server = new HttpServer(function (RequestInterface $request): ResponseInterface {
-            return $this->handleRequest($request);
-        });
+        $this->server = new HttpServer(
+            fn (RequestInterface $request): ResponseInterface => $this->handleRequest($request),
+        );
         $this->socket = new SocketServer(sprintf('0.0.0.0:%d', $port));
     }
 
@@ -93,27 +93,21 @@ final class MockServer
                 'token' => self::VALID_TOKEN,
                 'path' => '/customtypes/insert',
                 'file' => __DIR__ . '/responses/POST.customtypes-insert.http',
-                'body' => static function (string $body): bool {
-                    return strpos($body, '"id":"not-found"') !== false;
-                },
+                'body' => static fn (string $body): bool => strpos($body, '"id":"not-found"') !== false,
             ],
             [
                 'method' => 'POST',
                 'token' => self::VALID_TOKEN,
                 'path' => '/customtypes/insert',
                 'file' => __DIR__ . '/responses/POST.customtypes-insert.invalid-spec.http',
-                'body' => static function (string $body): bool {
-                    return strpos($body, '"id":"invalid-insert"') !== false;
-                },
+                'body' => static fn (string $body): bool => strpos($body, '"id":"invalid-insert"') !== false,
             ],
             [
                 'method' => 'POST',
                 'token' => self::VALID_TOKEN,
                 'path' => '/customtypes/insert',
                 'file' => __DIR__ . '/responses/POST.customtypes-insert.duplicate.http',
-                'body' => static function (string $body): bool {
-                    return strpos($body, '"id":"duplicate-insert"') !== false;
-                },
+                'body' => static fn (string $body): bool => strpos($body, '"id":"duplicate-insert"') !== false,
             ],
             [
                 'method' => 'DELETE',
@@ -126,27 +120,21 @@ final class MockServer
                 'token' => self::VALID_TOKEN,
                 'path' => '/customtypes/update',
                 'file' => __DIR__ . '/responses/POST.customtypes-update.http',
-                'body' => static function (string $body): bool {
-                    return strpos($body, '"id":"example"') !== false;
-                },
+                'body' => static fn (string $body): bool => strpos($body, '"id":"example"') !== false,
             ],
             [
                 'method' => 'POST',
                 'token' => self::VALID_TOKEN,
                 'path' => '/customtypes/update',
                 'file' => __DIR__ . '/responses/POST.customtypes-update.not-found.http',
-                'body' => static function (string $body): bool {
-                    return strpos($body, '"id":"not-found-for-update"') !== false;
-                },
+                'body' => static fn (string $body): bool => strpos($body, '"id":"not-found-for-update"') !== false,
             ],
             [
                 'method' => 'POST',
                 'token' => self::VALID_TOKEN,
                 'path' => '/customtypes/update',
                 'file' => __DIR__ . '/responses/POST.customtypes-update.invalid-spec.http',
-                'body' => static function (string $body): bool {
-                    return strpos($body, '"id":"invalid-spec"') !== false;
-                },
+                'body' => static fn (string $body): bool => strpos($body, '"id":"invalid-spec"') !== false,
             ],
             [
                 'method' => 'GET',

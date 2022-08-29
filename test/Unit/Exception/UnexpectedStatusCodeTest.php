@@ -16,12 +16,12 @@ class UnexpectedStatusCodeTest extends TestCase
         $error = UnexpectedStatusCode::withExpectedCode(
             123,
             $this->createMock(ServerRequestInterface::class),
-            new TextResponse('Foo', 234)
+            new TextResponse('Foo', 234),
         );
 
         self::assertEquals(
             'Expected the HTTP response code 123 but received 234',
-            $error->getMessage()
+            $error->getMessage(),
         );
     }
 }

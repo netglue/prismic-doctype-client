@@ -7,9 +7,7 @@ namespace Prismic\DocumentType;
 use JsonSerializable;
 use Prismic\DocumentType\Exception\AssertionFailed;
 
-/**
- * @psalm-immutable
- */
+/** @psalm-immutable */
 final class Definition implements JsonSerializable
 {
     private string $id;
@@ -63,7 +61,7 @@ final class Definition implements JsonSerializable
             $data['label'],
             $data['repeatable'],
             $data['status'],
-            Json::encodeArray($data['json'])
+            Json::encodeArray($data['json']),
         );
     }
 

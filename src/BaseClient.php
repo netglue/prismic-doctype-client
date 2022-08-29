@@ -62,7 +62,7 @@ final class BaseClient implements Client
             $this->requestFactory,
             $this->uriFactory,
             $this->streamFactory,
-            $this->baseUri
+            $this->baseUri,
         );
     }
 
@@ -84,7 +84,7 @@ final class BaseClient implements Client
     public function fetchAllDefinitions(): iterable
     {
         $response = $this->send(
-            $this->request('GET', '/customtypes')
+            $this->request('GET', '/customtypes'),
         );
 
         $body = Json::decodeToArray((string) $response->getBody());
@@ -117,7 +117,7 @@ final class BaseClient implements Client
         $request = $this->request('POST', '/customtypes/insert')
             ->withHeader('Content-Type', 'application/json')
             ->withBody($this->streamFactory->createStream(
-                Json::encodeObject($definition)
+                Json::encodeObject($definition),
             ));
 
         $response = $this->send($request);
@@ -140,7 +140,7 @@ final class BaseClient implements Client
         $request = $this->request('POST', '/customtypes/update')
             ->withHeader('Content-Type', 'application/json')
             ->withBody($this->streamFactory->createStream(
-                Json::encodeObject($definition)
+                Json::encodeObject($definition),
             ));
 
         $response = $this->send($request);
@@ -180,7 +180,7 @@ final class BaseClient implements Client
         $request = $this->requestFactory->createRequest(
             $method,
             $this->uriFactory->createUri($this->baseUri)
-                ->withPath($path)
+                ->withPath($path),
         );
 
         return $request->withHeader('repository', $this->repository)
