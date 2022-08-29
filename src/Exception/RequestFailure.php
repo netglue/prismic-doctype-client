@@ -13,8 +13,7 @@ use function sprintf;
 
 final class RequestFailure extends RuntimeException implements Exception
 {
-    /** @var RequestInterface|null */
-    private $request;
+    private ?RequestInterface $request = null;
 
     public static function withPsrError(RequestInterface $request, PsrHttpError $error): self
     {

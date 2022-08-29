@@ -26,8 +26,7 @@ class BaseClientTest extends MockServerTestCase
 {
     private const EXPECTED_REPOSITORY = 'expected-repo-name';
 
-    /** @var BaseClient */
-    private $client;
+    private BaseClient $client;
 
     protected function setUp(): void
     {

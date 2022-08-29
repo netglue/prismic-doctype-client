@@ -10,12 +10,11 @@ use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 use Throwable;
 
+/** @internal */
 abstract class ResponseError extends RuntimeException implements Exception
 {
-    /** @var RequestInterface|null */
-    protected $request;
-    /** @var ResponseInterface|null */
-    protected $response;
+    protected ?RequestInterface $request = null;
+    protected ?ResponseInterface $response = null;
 
     final public function __construct(string $message, int $code, ?Throwable $previous = null) // phpcs:ignore
     {

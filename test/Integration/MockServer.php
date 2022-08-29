@@ -21,17 +21,13 @@ use function strtoupper;
 final class MockServer
 {
     public const VALID_TOKEN = 'Valid Token';
-    /** @var HttpServer */
-    private $server;
-    /** @var SocketServer */
-    private $socket;
+    private HttpServer $server;
+    private SocketServer $socket;
 
     /**
      * Seconds before the server shuts down automatically
-     *
-     * @var int
      */
-    private $timeout = 10;
+    private int $timeout = 10;
 
     public function __construct(int $port)
     {

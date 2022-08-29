@@ -24,20 +24,14 @@ use function sprintf;
 final class BaseClient implements Client
 {
     private const DEFAULT_BASE_URI = 'https://customtypes.prismic.io';
-    /** @var string */
-    private $token;
-    /** @var string */
-    private $repository;
-    /** @var HttpClient */
-    private $httpClient;
-    /** @var RequestFactoryInterface */
-    private $requestFactory;
-    /** @var UriFactoryInterface */
-    private $uriFactory;
-    /** @var StreamFactoryInterface */
-    private $streamFactory;
-    /** @var string */
-    private $baseUri;
+
+    private string $token;
+    private string $repository;
+    private HttpClient $httpClient;
+    private RequestFactoryInterface $requestFactory;
+    private UriFactoryInterface $uriFactory;
+    private StreamFactoryInterface $streamFactory;
+    private string $baseUri;
 
     public function __construct(
         string $token,
