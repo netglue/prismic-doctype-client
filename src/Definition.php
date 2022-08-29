@@ -12,16 +12,11 @@ use Prismic\DocumentType\Exception\AssertionFailed;
  */
 final class Definition implements JsonSerializable
 {
-    /** @var string */
-    private $id;
-    /** @var string */
-    private $label;
-    /** @var bool */
-    private $repeatable;
-    /** @var bool */
-    private $active;
-    /** @var string */
-    private $json;
+    private string $id;
+    private string $label;
+    private bool $repeatable;
+    private bool $active;
+    private string $json;
 
     private function __construct(
         string $id,

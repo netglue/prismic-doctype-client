@@ -17,14 +17,10 @@ use const CURLOPT_CONNECTTIMEOUT_MS;
 
 abstract class MockServerTestCase extends TestCase
 {
-    /** @var int */
-    private static $serverPort;
-    /** @var Process */
-    private static $serverProcess;
-    /** @var HttpClient */
-    private static $httpClient;
-    /** @var RequestFactory */
-    private static $requestFactory;
+    private static int $serverPort;
+    private static Process $serverProcess;
+    private static HttpClient $httpClient;
+    private static RequestFactory $requestFactory;
 
     protected function setUp(): void
     {

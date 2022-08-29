@@ -12,8 +12,7 @@ use function sprintf;
 
 final class JsonError extends RuntimeException implements Exception
 {
-    /** @var string|null */
-    private $jsonString;
+    private ?string $jsonString = null;
 
     /**
      * @psalm-suppress InvalidScalarArgument

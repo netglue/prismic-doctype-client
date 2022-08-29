@@ -29,8 +29,7 @@ use function uniqid;
  */
 final class BaseClientTest extends TestCase
 {
-    /** @var BaseClient */
-    protected $client;
+    protected BaseClient $client;
 
     protected function setUp(): void
     {

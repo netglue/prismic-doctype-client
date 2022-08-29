@@ -10,14 +10,10 @@ use Psr\Http\Message\ResponseInterface;
 
 final class HttpClient implements ClientInterface
 {
-    /** @var ClientInterface */
-    private $client;
-    /** @var RequestInterface|null */
-    private $lastRequest;
-    /** @var ResponseInterface|null */
-    private $lastResponse;
-    /** @var int */
-    private $invocationCount = 0;
+    private ClientInterface $client;
+    private ?RequestInterface $lastRequest = null;
+    private ?ResponseInterface $lastResponse = null;
+    private int $invocationCount = 0;
 
     public function __construct(ClientInterface $client)
     {
