@@ -21,9 +21,7 @@ abstract class ResponseError extends RuntimeException implements Exception
         parent::__construct($message, $code, $previous);
     }
 
-    /**
-     * @return static
-     */
+    /** @return static */
     final protected static function withHttpExchange(
         string $message,
         RequestInterface $request,
@@ -41,7 +39,7 @@ abstract class ResponseError extends RuntimeException implements Exception
         Assert::isInstanceOf(
             $this->request,
             RequestInterface::class,
-            'This error was not constructed with a request instance'
+            'This error was not constructed with a request instance',
         );
 
         return $this->request;
@@ -52,7 +50,7 @@ abstract class ResponseError extends RuntimeException implements Exception
         Assert::isInstanceOf(
             $this->response,
             ResponseInterface::class,
-            'This error was not constructed with a response instance'
+            'This error was not constructed with a response instance',
         );
 
         return $this->response;

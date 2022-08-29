@@ -38,7 +38,7 @@ class BaseClientTest extends MockServerTestCase
             $this->requestFactory(),
             new UriFactory(),
             new StreamFactory(),
-            self::apiServerUri()
+            self::apiServerUri(),
         );
     }
 
@@ -54,7 +54,7 @@ class BaseClientTest extends MockServerTestCase
         self::assertEquals(
             $error->response()->getStatusCode(),
             $error->getCode(),
-            'The error code does not match the response status code'
+            'The error code does not match the response status code',
         );
     }
 
@@ -67,7 +67,7 @@ class BaseClientTest extends MockServerTestCase
             $this->requestFactory(),
             new UriFactory(),
             new StreamFactory(),
-            'http://192.0.2.1'
+            'http://192.0.2.1',
         );
 
         $this->expectException(RequestFailure::class);
@@ -124,7 +124,7 @@ class BaseClientTest extends MockServerTestCase
             'Foo',
             true,
             true,
-            '{"foo":"bar"}'
+            '{"foo":"bar"}',
         ));
 
         $last = $this->httpClient()->lastRequest();
@@ -143,7 +143,7 @@ class BaseClientTest extends MockServerTestCase
                 'Foo',
                 true,
                 true,
-                '{"foo":"bar"}'
+                '{"foo":"bar"}',
             ));
         } catch (InvalidDefinition $error) {
             $this->assertExceptionContainsReferenceToTheLastErroneousRequest($error);
@@ -164,7 +164,7 @@ class BaseClientTest extends MockServerTestCase
                 'Foo',
                 true,
                 true,
-                '{"foo":"bar"}'
+                '{"foo":"bar"}',
             ));
         } catch (InsertFailed $error) {
             $this->assertExceptionContainsReferenceToTheLastErroneousRequest($error);
@@ -185,7 +185,7 @@ class BaseClientTest extends MockServerTestCase
                 'In Mock Server',
                 true,
                 true,
-                '{"causes":"a 500 error"}'
+                '{"causes":"a 500 error"}',
             ));
         } catch (UnexpectedStatusCode $error) {
             $this->assertExceptionContainsReferenceToTheLastErroneousRequest($error);
@@ -226,7 +226,7 @@ class BaseClientTest extends MockServerTestCase
             'Foo',
             true,
             true,
-            '{"foo":"bar"}'
+            '{"foo":"bar"}',
         ));
 
         $last = $this->httpClient()->lastRequest();
@@ -245,7 +245,7 @@ class BaseClientTest extends MockServerTestCase
                 'Foo',
                 true,
                 true,
-                '{"foo":"bar"}'
+                '{"foo":"bar"}',
             ));
         } catch (UpdateFailed $error) {
             $this->assertExceptionContainsReferenceToTheLastErroneousRequest($error);
@@ -266,7 +266,7 @@ class BaseClientTest extends MockServerTestCase
                 'Foo',
                 true,
                 true,
-                '{"foo":"bar"}'
+                '{"foo":"bar"}',
             ));
         } catch (InvalidDefinition $error) {
             $this->assertExceptionContainsReferenceToTheLastErroneousRequest($error);
@@ -287,7 +287,7 @@ class BaseClientTest extends MockServerTestCase
                 'In Mock Server',
                 true,
                 true,
-                '{"causes":"a 500 error"}'
+                '{"causes":"a 500 error"}',
             ));
         } catch (InvalidDefinition $error) {
             $this->assertExceptionContainsReferenceToTheLastErroneousRequest($error);
@@ -338,7 +338,7 @@ class BaseClientTest extends MockServerTestCase
             'Foo',
             true,
             true,
-            '{"foo":"bar"}'
+            '{"foo":"bar"}',
         ));
 
         $last = $this->httpClient()->lastRequest();
@@ -353,7 +353,7 @@ class BaseClientTest extends MockServerTestCase
             'Example',
             true,
             true,
-            '{"Main":{"value":{"type":"Number","config":{"label":"Value","min":0,"max":10}}}}'
+            '{"Main":{"value":{"type":"Number","config":{"label":"Value","min":0,"max":10}}}}',
         ));
 
         $last = $this->httpClient()->lastRequest();
@@ -372,7 +372,7 @@ class BaseClientTest extends MockServerTestCase
             'Example',
             true,
             true,
-            '{"foo":"bar"}'
+            '{"foo":"bar"}',
         ));
 
         $last = $this->httpClient()->lastRequest();

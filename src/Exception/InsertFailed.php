@@ -20,10 +20,10 @@ final class InsertFailed extends ResponseError
         return self::withHttpExchange(
             sprintf(
                 'Failed to insert the definition "%s" because one already exists with that identifier',
-                $definition->id()
+                $definition->id(),
             ),
             $request,
-            $response
+            $response,
         );
     }
 }

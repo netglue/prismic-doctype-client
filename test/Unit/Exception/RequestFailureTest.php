@@ -24,7 +24,7 @@ class RequestFailureTest extends TestCase
     {
         $error = RequestFailure::withPsrError(
             new Request('/foo'),
-            $this->createMock(ClientExceptionInterface::class)
+            $this->createMock(ClientExceptionInterface::class),
         );
 
         self::assertEquals(0, $error->getCode());
@@ -35,7 +35,7 @@ class RequestFailureTest extends TestCase
         $exception = $this->createMock(ClientExceptionInterface::class);
         $error = RequestFailure::withPsrError(
             new Request('/foo'),
-            $exception
+            $exception,
         );
 
         self::assertSame($exception, $error->getPrevious());

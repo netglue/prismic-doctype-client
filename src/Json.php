@@ -34,9 +34,7 @@ final class Json
         }
     }
 
-    /**
-     * @param array<array-key, mixed> $parameters
-     */
+    /** @param array<array-key, mixed> $parameters */
     public static function encodeArray(array $parameters): string
     {
         try {
