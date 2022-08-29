@@ -1,0 +1,13 @@
+/.cache/ export-ignore
+/.github/ export-ignore
+/.laminas-ci/ export-ignore
+/test/ export-ignore
+.gitattributes export-ignore
+.gitignore export-ignore
+.laminas-ci.json export-ignore
+composer.lock export-ignore
+infection-custom.json export-ignore
+phpcs.xml export-ignore
+phpunit.xml.dist export-ignore
+psalm.xml export-ignore
+psalm-baseline.xml export-ignore
