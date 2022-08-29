@@ -23,7 +23,7 @@
     },
     "require-dev": {
         "ext-curl": "*",
-        "doctrine/coding-standard": "^9.0",
+        "doctrine/coding-standard": "^9.0 || ^10.0",
         "ergebnis/composer-normalize": "^2.15",
         "infection/infection": "^0",
         "laminas/laminas-diactoros": "^2.8",
