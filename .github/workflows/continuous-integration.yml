@@ -29,8 +29,8 @@ jobs:
       - run: php ./vendor/bin/phpunit --coverage-clover=coverage.xml
         # Env allows smoke tests to run against a real repository
         env:
-          - PRISMIC_REPOSITORY: ${{ secrets.PRISMIC_REPOSITORY }}
-          - PRISMIC_TOKEN: ${{ secrets.PRISMIC_TOKEN }}
+          PRISMIC_REPOSITORY: ${{ secrets.PRISMIC_REPOSITORY }}
+          PRISMIC_TOKEN: ${{ secrets.PRISMIC_TOKEN }}
       - uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
