@@ -12,7 +12,7 @@ use function sprintf;
 
 final class JsonError extends RuntimeException implements Exception
 {
-    private ?string $jsonString = null;
+    private string|null $jsonString = null;
 
     /** @psalm-suppress InvalidScalarArgument */
     public static function onDecode(string $payload, JsonException $error): self

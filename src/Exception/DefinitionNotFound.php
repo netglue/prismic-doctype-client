@@ -14,7 +14,7 @@ final class DefinitionNotFound extends ResponseError
     public static function withIdentifier(
         string $id,
         RequestInterface $request,
-        ResponseInterface $response
+        ResponseInterface $response,
     ): self {
         return self::withHttpExchange(
             sprintf('A custom type with the id "%s" cannot be found', $id),

@@ -25,35 +25,20 @@ final class BaseClient implements Client
 {
     private const DEFAULT_BASE_URI = 'https://customtypes.prismic.io';
 
-    private string $token;
-    private string $repository;
-    private HttpClient $httpClient;
-    private RequestFactoryInterface $requestFactory;
-    private UriFactoryInterface $uriFactory;
-    private StreamFactoryInterface $streamFactory;
-    private string $baseUri;
-
     public function __construct(
-        string $token,
-        string $repository,
-        HttpClient $httpClient,
-        RequestFactoryInterface $requestFactory,
-        UriFactoryInterface $uriFactory,
-        StreamFactoryInterface $streamFactory,
-        string $baseUri = self::DEFAULT_BASE_URI
+        private string $token,
+        private string $repository,
+        private HttpClient $httpClient,
+        private RequestFactoryInterface $requestFactory,
+        private UriFactoryInterface $uriFactory,
+        private StreamFactoryInterface $streamFactory,
+        private string $baseUri = self::DEFAULT_BASE_URI,
     ) {
-        $this->token = $token;
-        $this->repository = $repository;
-        $this->httpClient = $httpClient;
-        $this->requestFactory = $requestFactory;
-        $this->uriFactory = $uriFactory;
-        $this->streamFactory = $streamFactory;
-        $this->baseUri = $baseUri;
     }
 
     public function withAlternativeRepository(
         string $repository,
-        string $token
+        string $token,
     ): self {
         return new self(
             $token,
@@ -162,7 +147,7 @@ final class BaseClient implements Client
     {
         try {
             $current = $this->getDefinition($definition->id());
-        } catch (DefinitionNotFound $error) {
+        } catch (DefinitionNotFound) {
             $this->createDefinition($definition);
 
             return;

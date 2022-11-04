@@ -61,7 +61,7 @@ final class MockServer
         return $response;
     }
 
-    private static function match(RequestInterface $request): ?ResponseInterface
+    private static function match(RequestInterface $request): ResponseInterface|null
     {
         $responses = [
             [
