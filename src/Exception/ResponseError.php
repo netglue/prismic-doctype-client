@@ -13,8 +13,8 @@ use Throwable;
 /** @internal */
 abstract class ResponseError extends RuntimeException implements Exception
 {
-    protected ?RequestInterface $request = null;
-    protected ?ResponseInterface $response = null;
+    protected RequestInterface|null $request = null;
+    protected ResponseInterface|null $response = null;
 
     final public function __construct(string $message, int $code, ?Throwable $previous = null) // phpcs:ignore
     {
@@ -25,7 +25,7 @@ abstract class ResponseError extends RuntimeException implements Exception
     final protected static function withHttpExchange(
         string $message,
         RequestInterface $request,
-        ResponseInterface $response
+        ResponseInterface $response,
     ): self {
         $error = new static($message, $response->getStatusCode());
         $error->request = $request;

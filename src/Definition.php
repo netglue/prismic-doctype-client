@@ -10,24 +10,13 @@ use Prismic\DocumentType\Exception\AssertionFailed;
 /** @psalm-immutable */
 final class Definition implements JsonSerializable
 {
-    private string $id;
-    private string $label;
-    private bool $repeatable;
-    private bool $active;
-    private string $json;
-
     private function __construct(
-        string $id,
-        string $label,
-        bool $repeatable,
-        bool $active,
-        string $json
+        private string $id,
+        private string $label,
+        private bool $repeatable,
+        private bool $active,
+        private string $json,
     ) {
-        $this->id = $id;
-        $this->label = $label;
-        $this->repeatable = $repeatable;
-        $this->active = $active;
-        $this->json = $json;
     }
 
     public static function new(
@@ -35,7 +24,7 @@ final class Definition implements JsonSerializable
         string $label,
         bool $repeatable,
         bool $active,
-        string $json
+        string $json,
     ): self {
         return new self($id, $label, $repeatable, $active, $json);
     }

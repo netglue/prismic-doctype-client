@@ -15,7 +15,7 @@ final class InsertFailed extends ResponseError
     public static function withDefinition(
         Definition $definition,
         RequestInterface $request,
-        ResponseInterface $response
+        ResponseInterface $response,
     ): self {
         return self::withHttpExchange(
             sprintf(
