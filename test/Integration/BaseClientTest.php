@@ -31,6 +31,7 @@ class BaseClientTest extends MockServerTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->client = new BaseClient(
             MockServer::VALID_TOKEN,
             self::EXPECTED_REPOSITORY,
