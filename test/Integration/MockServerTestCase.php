@@ -25,6 +25,7 @@ abstract class MockServerTestCase extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->httpClient()->clearState();
     }
 

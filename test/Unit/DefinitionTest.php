@@ -20,6 +20,7 @@ final class DefinitionTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->type = Definition::new(
             'custom',
             'Custom Type',
