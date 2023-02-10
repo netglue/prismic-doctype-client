@@ -56,7 +56,7 @@ final class BaseClientTest extends TestCase
     }
 
     /** @return array<string, string[]> */
-    public function invalidRepositoryDataProvider(): array
+    public static function invalidRepositoryDataProvider(): array
     {
         return [
             'Invalid Repo + Invalid Token' => ['foo', 'foo'],

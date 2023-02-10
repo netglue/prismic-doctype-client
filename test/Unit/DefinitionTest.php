@@ -132,7 +132,7 @@ final class DefinitionTest extends TestCase
     }
 
     /** @return array<string, array{0:array<string, mixed>}> */
-    public function invalidDefinitionArrayProvider(): array
+    public static function invalidDefinitionArrayProvider(): array
     {
         return [
             'Missing ID' => [['label' => 'foo', 'repeatable' => true, 'status' => true, 'json' => ['foo' => 'bar']]],
