@@ -34,7 +34,7 @@ class JsonTest extends TestCase
     }
 
     /** @return array<string, array{0: string, 1: class-string<Throwable>}> */
-    public function decodeArrayInvalidData(): array
+    public static function decodeArrayInvalidData(): array
     {
         return [
             'Trailing Comma' => ['{"foo":"bar",}', JsonError::class],
