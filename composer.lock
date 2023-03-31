@@ -4979,12 +4979,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "4b0e5298866d2c0719e1b207492ce5a553f08d92"
+                "reference": "945aadf4c174c61973464b4000f4d7529aeb84a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/4b0e5298866d2c0719e1b207492ce5a553f08d92",
-                "reference": "4b0e5298866d2c0719e1b207492ce5a553f08d92",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/945aadf4c174c61973464b4000f4d7529aeb84a0",
+                "reference": "945aadf4c174c61973464b4000f4d7529aeb84a0",
                 "shasum": ""
             },
             "conflict": {
@@ -5298,12 +5298,13 @@
                 "phpoffice/phpspreadsheet": "<1.16",
                 "phpseclib/phpseclib": "<2.0.31|>=3,<3.0.19",
                 "phpservermon/phpservermon": "<=3.5.2",
+                "phpsysinfo/phpsysinfo": "<3.2.5",
                 "phpunit/phpunit": ">=4.8.19,<4.8.28|>=5,<5.6.3",
                 "phpwhois/phpwhois": "<=4.2.5",
                 "phpxmlrpc/extras": "<0.6.1",
                 "phpxmlrpc/phpxmlrpc": "<4.9.2",
                 "pimcore/data-hub": "<1.2.4",
-                "pimcore/pimcore": "<11",
+                "pimcore/pimcore": "<10.5.20",
                 "pixelfed/pixelfed": "<=0.11.4",
                 "pocketmine/bedrock-protocol": "<8.0.2",
                 "pocketmine/pocketmine-mp": "<4.12.5|>= 4.0.0-BETA5, < 4.4.2",
@@ -5566,7 +5567,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-03-29T19:04:03+00:00"
+            "time": "2023-03-30T21:04:19+00:00"
         },
         {
             "name": "sanmai/later",
@@ -7743,16 +7744,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "5.8.0",
+            "version": "5.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "9cf4f60a333f779ad3bc704a555920e81d4fdcda"
+                "reference": "8b9ad1eb9e8b7d3101f949291da2b9f7767cd163"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/9cf4f60a333f779ad3bc704a555920e81d4fdcda",
-                "reference": "9cf4f60a333f779ad3bc704a555920e81d4fdcda",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/8b9ad1eb9e8b7d3101f949291da2b9f7767cd163",
+                "reference": "8b9ad1eb9e8b7d3101f949291da2b9f7767cd163",
                 "shasum": ""
             },
             "require": {
@@ -7784,6 +7785,7 @@
                 "psalm/psalm": "self.version"
             },
             "require-dev": {
+                "amphp/phpunit-util": "^2.0",
                 "bamarni/composer-bin-plugin": "^1.4",
                 "brianium/paratest": "^6.9",
                 "ext-curl": "*",
@@ -7842,9 +7844,9 @@
             ],
             "support": {
                 "issues": "https://github.com/vimeo/psalm/issues",
-                "source": "https://github.com/vimeo/psalm/tree/5.8.0"
+                "source": "https://github.com/vimeo/psalm/tree/5.9.0"
             },
-            "time": "2023-03-09T04:14:35+00:00"
+            "time": "2023-03-29T21:38:21+00:00"
         }
     ],
     "aliases": [],
