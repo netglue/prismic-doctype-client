@@ -216,7 +216,7 @@ final class BaseClientTest extends TestCase
      * @depends testThatCallingSaveWillInsertADefinition
      * @depends testThatUpdatingWithInvalidSpecWillCauseAnError
      */
-    public function cleanUpTheDefinitionInTheRepo(Definition $definition): void
+    public function testCleanUpTheDefinitionInTheRepo(Definition $definition): void
     {
         $this->expectNotToPerformAssertions();
         $this->client->deleteDefinition($definition->id());
