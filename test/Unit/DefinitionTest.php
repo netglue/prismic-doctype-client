@@ -64,7 +64,7 @@ final class DefinitionTest extends TestCase
     public function testThatAnEmptyLabelIsExceptional(): void
     {
         $this->expectException(AssertionFailed::class);
-        /** @psalm-suppress UnusedMethodCall, InvalidArgument */
+        /** @psalm-suppress InvalidArgument */
         $this->type->withNewLabel('');
     }
 

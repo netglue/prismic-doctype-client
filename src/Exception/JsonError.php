@@ -14,7 +14,6 @@ final class JsonError extends RuntimeException implements Exception
 {
     private string|null $jsonString = null;
 
-    /** @psalm-suppress InvalidScalarArgument */
     public static function onDecode(string $payload, JsonException $error): self
     {
         $instance = new self(
@@ -27,7 +26,6 @@ final class JsonError extends RuntimeException implements Exception
         return $instance;
     }
 
-    /** @psalm-suppress InvalidScalarArgument */
     public static function onEncode(JsonException $error): self
     {
         return new self(
