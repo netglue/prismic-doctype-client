@@ -3872,16 +3872,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.1.3",
+            "version": "10.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "2379ebafc1737e71cdc84f402acb6b7f04198b9d"
+                "reference": "3aad97fde1f3e490e2b316ba56bc4680310e3c3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2379ebafc1737e71cdc84f402acb6b7f04198b9d",
-                "reference": "2379ebafc1737e71cdc84f402acb6b7f04198b9d",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3aad97fde1f3e490e2b316ba56bc4680310e3c3f",
+                "reference": "3aad97fde1f3e490e2b316ba56bc4680310e3c3f",
                 "shasum": ""
             },
             "require": {
@@ -3921,7 +3921,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "10.1-dev"
+                    "dev-main": "10.2-dev"
                 }
             },
             "autoload": {
@@ -3953,7 +3953,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.1.3"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.2.0"
             },
             "funding": [
                 {
@@ -3969,7 +3969,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-05-11T05:16:22+00:00"
+            "time": "2023-06-02T05:42:13+00:00"
         },
         {
             "name": "psalm/plugin-phpunit",
@@ -4184,33 +4184,33 @@
         },
         {
             "name": "react/dns",
-            "version": "v1.10.0",
+            "version": "v1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/dns.git",
-                "reference": "a5427e7dfa47713e438016905605819d101f238c"
+                "reference": "3be0fc8f1eb37d6875cd6f0c6c7d0be81435de9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/dns/zipball/a5427e7dfa47713e438016905605819d101f238c",
-                "reference": "a5427e7dfa47713e438016905605819d101f238c",
+                "url": "https://api.github.com/repos/reactphp/dns/zipball/3be0fc8f1eb37d6875cd6f0c6c7d0be81435de9f",
+                "reference": "3be0fc8f1eb37d6875cd6f0c6c7d0be81435de9f",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0",
                 "react/cache": "^1.0 || ^0.6 || ^0.5",
                 "react/event-loop": "^1.2",
-                "react/promise": "^3.0 || ^2.7 || ^1.2.1",
-                "react/promise-timer": "^1.9"
+                "react/promise": "^3.0 || ^2.7 || ^1.2.1"
             },
             "require-dev": {
-                "phpunit/phpunit": "^9.3 || ^4.8.35",
-                "react/async": "^4 || ^3 || ^2"
+                "phpunit/phpunit": "^9.5 || ^4.8.35",
+                "react/async": "^4 || ^3 || ^2",
+                "react/promise-timer": "^1.9"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "React\\Dns\\": "src"
+                    "React\\Dns\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -4248,19 +4248,15 @@
             ],
             "support": {
                 "issues": "https://github.com/reactphp/dns/issues",
-                "source": "https://github.com/reactphp/dns/tree/v1.10.0"
+                "source": "https://github.com/reactphp/dns/tree/v1.11.0"
             },
             "funding": [
                 {
-                    "url": "https://github.com/WyriHaximus",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/clue",
-                    "type": "github"
+                    "url": "https://opencollective.com/reactphp",
+                    "type": "open_collective"
                 }
             ],
-            "time": "2022-09-08T12:22:46+00:00"
+            "time": "2023-06-02T12:45:26+00:00"
         },
         {
             "name": "react/event-loop",
@@ -4814,12 +4810,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "4dac38892bfbf1fc7536b70b0a1f60718b39af1c"
+                "reference": "0feb297cb2162446e9d3334cd131d861d7d2d997"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/4dac38892bfbf1fc7536b70b0a1f60718b39af1c",
-                "reference": "4dac38892bfbf1fc7536b70b0a1f60718b39af1c",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/0feb297cb2162446e9d3334cd131d861d7d2d997",
+                "reference": "0feb297cb2162446e9d3334cd131d861d7d2d997",
                 "shasum": ""
             },
             "conflict": {
@@ -4895,7 +4891,7 @@
                 "contao/core-bundle": "<4.9.40|>=4.10,<4.11.7|>=4.13,<4.13.21|>=5.1,<5.1.4|= 4.10.0",
                 "contao/listing-bundle": ">=4,<4.4.8",
                 "contao/managed-edition": "<=1.5",
-                "craftcms/cms": ">= 4.0.0-RC1, <= 4.4.5|>= 4.0.0-RC1, <= 4.4.6|<=3.8.5|>=4,<4.4.6|>= 4.0.0-RC1, < 4.4.6|>= 4.0.0-RC1, < 4.3.7|>= 4.0.0-RC1, < 4.2.1",
+                "craftcms/cms": "<4.4.12|>= 4.0.0-RC1, <= 4.4.5|>= 4.0.0-RC1, <= 4.4.6|>= 4.0.0-RC1, < 4.4.6|>= 4.0.0-RC1, < 4.3.7|>= 4.0.0-RC1, < 4.2.1",
                 "croogo/croogo": "<3.0.7",
                 "cuyz/valinor": "<0.12",
                 "czproject/git-php": "<4.0.3",
@@ -5414,7 +5410,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-06-01T20:04:19+00:00"
+            "time": "2023-06-02T23:04:03+00:00"
         },
         {
             "name": "sanmai/later",
