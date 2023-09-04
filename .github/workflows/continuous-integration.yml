@@ -18,7 +18,7 @@ jobs:
     name: PHPUnit Coverage
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@2.25.5
         with:
           php-version: ${{ env.default_php }}
@@ -42,7 +42,7 @@ jobs:
     runs-on: "ubuntu-latest"
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@2.25.5
         with:
           php-version: ${{ env.default_php }}
@@ -60,7 +60,7 @@ jobs:
     runs-on: "ubuntu-latest"
 
     steps:
-      - uses: "actions/checkout@v3"
+      - uses: "actions/checkout@v4"
       - uses: "shivammathur/setup-php@2.25.5"
         with:
           coverage: "xdebug"
