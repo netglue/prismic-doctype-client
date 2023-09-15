@@ -31,7 +31,7 @@ jobs:
         env:
           PRISMIC_REPOSITORY: ${{ secrets.PRISMIC_REPOSITORY }}
           PRISMIC_TOKEN: ${{ secrets.PRISMIC_TOKEN }}
-      - uses: codecov/codecov-action@v4
+      - uses: codecov/codecov-action@v4-beta
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.xml
