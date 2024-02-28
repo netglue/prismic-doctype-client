@@ -25,7 +25,7 @@ jobs:
           extensions: pcov
           coverage: pcov
           ini-values: pcov.enabled=1
-      - uses: "ramsey/composer-install@2.2.0"
+      - uses: "ramsey/composer-install@2.3.0"
       - run: php ./vendor/bin/phpunit --coverage-clover=coverage.xml
         # Env allows smoke tests to run against a real repository
         env:
@@ -50,7 +50,7 @@ jobs:
           php-version: ${{ env.default_php }}
           ini-values: memory_limit=-1
           extensions: ${{ env.php_extensions }}
-      - uses: "ramsey/composer-install@2.2.0"
+      - uses: "ramsey/composer-install@2.3.0"
         with:
           dependency-versions: "highest"
       - run: composer global config bin-dir /usr/local/bin
@@ -67,7 +67,7 @@ jobs:
         with:
           coverage: "xdebug"
           php-version: ${{ env.default_php }}
-      - uses: "ramsey/composer-install@2.2.0"
+      - uses: "ramsey/composer-install@2.3.0"
         with:
           dependency-versions: "highest"
       - run: "vendor/bin/infection --configuration=infection-custom.json"
