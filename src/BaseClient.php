@@ -21,7 +21,7 @@ use Psr\Http\Message\UriFactoryInterface;
 
 use function sprintf;
 
-final class BaseClient implements Client
+final class BaseClient implements Client, SharedSliceManagementClient
 {
     private const DEFAULT_BASE_URI = 'https://customtypes.prismic.io';
 
@@ -187,5 +187,106 @@ final class BaseClient implements Client
         }
 
         return $response;
+    }
+
+    /** @inheritDoc */
+    public function fetchAllSharedSlices(): iterable
+    {
+        $response = $this->send(
+            $this->request('GET', '/slices'),
+        );
+
+        $body = Json::decodeToArray((string) $response->getBody());
+        $list = [];
+        foreach ($body as $item) {
+            Assert::isArray($item);
+            $definition = SharedSlice::fromArray($item);
+            $list[$definition->id] = $definition;
+        }
+
+        return $list;
+    }
+
+    public function createSharedSlice(SharedSlice $definition): void
+    {
+        $request = $this->request('POST', '/slices/insert')
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody($this->streamFactory->createStream($definition->json));
+
+        $response = $this->send($request);
+
+        if ($response->getStatusCode() === 400) {
+            throw InvalidDefinition::invalidSlice($request, $response);
+        }
+
+        if ($response->getStatusCode() === 409) {
+            throw InsertFailed::forSlice($definition, $request, $response);
+        }
+
+        if ($response->getStatusCode() !== 201) {
+            throw UnexpectedStatusCode::withExpectedCode(201, $request, $response);
+        }
+    }
+
+    public function updateSharedSlice(SharedSlice $definition): void
+    {
+        $request = $this->request('POST', '/slices/update')
+            ->withHeader('Content-Type', 'application/json')
+            ->withBody($this->streamFactory->createStream($definition->json));
+
+        $response = $this->send($request);
+
+        if ($response->getStatusCode() === 400) {
+            throw InvalidDefinition::invalidSlice($request, $response);
+        }
+
+        if ($response->getStatusCode() === 422) {
+            throw UpdateFailed::forSlice($definition, $request, $response);
+        }
+
+        if ($response->getStatusCode() !== 204) {
+            throw UnexpectedStatusCode::withExpectedCode(204, $request, $response);
+        }
+    }
+
+    public function saveSharedSlice(SharedSlice $slice): void
+    {
+        try {
+            $current = $this->getSharedSlice($slice->id);
+        } catch (DefinitionNotFound) {
+            $this->createSharedSlice($slice);
+
+            return;
+        }
+
+        if ($slice->equals($current)) {
+            return;
+        }
+
+        $this->updateSharedSlice($slice);
+    }
+
+    public function getSharedSlice(string $id): SharedSlice
+    {
+        $request = $this->request('GET', sprintf('/slices/%s', $id));
+        $response = $this->send($request);
+
+        if ($response->getStatusCode() === 404) {
+            throw DefinitionNotFound::forSharedSlice($id, $request, $response);
+        }
+
+        return SharedSlice::fromArray(
+            Json::decodeToArray((string) $response->getBody()),
+        );
+    }
+
+    public function deleteSharedSlice(string $id): void
+    {
+        $request = $this->request('DELETE', sprintf('/slices/%s', $id));
+        $response = $this->send($request);
+
+        if ($response->getStatusCode() !== 204) {
+            throw UnexpectedStatusCode::withExpectedCode(204, $request, $response);
+        }
     }
 }

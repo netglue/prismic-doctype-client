@@ -13,6 +13,8 @@ interface Client
     /**
      * Retrieve a document type definition by its identifier
      *
+     * @param non-empty-string $id
+     *
      * @throws DefinitionNotFound if there is no such type with the given id.
      * @throws Exception if any errors occur communicating with the remote API.
      */
@@ -36,6 +38,8 @@ interface Client
 
     /**
      * Deletes the definition with the given identifier
+     *
+     * @param non-empty-string $id
      *
      * @throws Exception if any errors occur communicating with the remote API.
      */

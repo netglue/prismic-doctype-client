@@ -10,6 +10,10 @@ use Prismic\DocumentType\Exception\AssertionFailed;
 /** @psalm-immutable */
 final class Definition implements JsonSerializable
 {
+    /**
+     * @param non-empty-string $id
+     * @param non-empty-string $json
+     */
     private function __construct(
         private string $id,
         private string $label,
@@ -19,6 +23,10 @@ final class Definition implements JsonSerializable
     ) {
     }
 
+    /**
+     * @param non-empty-string $id
+     * @param non-empty-string $json
+     */
     public static function new(
         string $id,
         string $label,
@@ -66,6 +74,7 @@ final class Definition implements JsonSerializable
         ];
     }
 
+    /** @return non-empty-string */
     public function id(): string
     {
         return $this->id;
@@ -86,11 +95,13 @@ final class Definition implements JsonSerializable
         return $this->active;
     }
 
+    /** @return non-empty-string */
     public function json(): string
     {
         return $this->json;
     }
 
+    /** @param non-empty-string $json */
     public function withAlteredPayload(string $json): self
     {
         $clone = clone $this;

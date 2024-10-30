@@ -18,6 +18,8 @@ use function sprintf;
 use function strpos;
 use function strtoupper;
 
+use const PHP_EOL;
+
 final class MockServer
 {
     public const VALID_TOKEN = 'Valid Token';
@@ -52,16 +54,6 @@ final class MockServer
     }
 
     private function handleRequest(RequestInterface $request): ResponseInterface
-    {
-        $response = self::match($request);
-        if (! $response) {
-            return new TextResponse('Invalid Request', 500);
-        }
-
-        return $response;
-    }
-
-    private static function match(RequestInterface $request): ResponseInterface|null
     {
         $responses = [
             [
@@ -148,6 +140,113 @@ final class MockServer
                 'path' => '/customtypes/403',
                 'file' => __DIR__ . '/responses/403.http',
             ],
+            // Slices
+            [
+                'method' => 'GET',
+                'token' => self::VALID_TOKEN,
+                'path' => '/slices',
+                'file' => __DIR__ . '/responses/GET.slices.http',
+            ],
+            [
+                'method' => 'POST',
+                'token' => self::VALID_TOKEN,
+                'path' => '/slices/insert',
+                'file' => __DIR__ . '/responses/POST.slices-insert.http',
+                'body' => static fn (string $body): bool => strpos($body, '"id":"example-slice"') !== false,
+            ],
+            [
+                'method' => 'POST',
+                'token' => self::VALID_TOKEN,
+                'path' => '/slices/insert',
+                'file' => __DIR__ . '/responses/POST.slices-insert.duplicate.http',
+                'body' => static fn (string $body): bool => strpos($body, '"id":"duplicate-slice"') !== false,
+            ],
+            [
+                'method' => 'POST',
+                'token' => self::VALID_TOKEN,
+                'path' => '/slices/insert',
+                'file' => __DIR__ . '/responses/POST.slices-insert.invalid.http',
+                'body' => static fn (string $body): bool => strpos($body, '"id":"invalid-slice"') !== false,
+            ],
+            [
+                'method' => 'POST',
+                'token' => self::VALID_TOKEN,
+                'path' => '/slices/insert',
+                'file' => __DIR__ . '/responses/POST.slices-insert.unexpected.http',
+                'body' => static fn (string $body): bool => strpos($body, '"id":"unexpected"') !== false,
+            ],
+            [
+                'method' => 'POST',
+                'token' => self::VALID_TOKEN,
+                'path' => '/slices/update',
+                'file' => __DIR__ . '/responses/POST.slices-update.http',
+                'body' => static fn (string $body): bool => strpos($body, '"id":"update"') !== false,
+            ],
+            [
+                'method' => 'POST',
+                'token' => self::VALID_TOKEN,
+                'path' => '/slices/update',
+                'file' => __DIR__ . '/responses/POST.slices-insert.invalid.http',
+                'body' => static fn (string $body): bool => strpos($body, '"id":"update-invalid"') !== false,
+            ],
+            [
+                'method' => 'POST',
+                'token' => self::VALID_TOKEN,
+                'path' => '/slices/update',
+                'file' => __DIR__ . '/responses/POST.slices-update.not-found.http',
+                'body' => static fn (string $body): bool => strpos($body, '"id":"update-missing"') !== false,
+            ],
+            [
+                'method' => 'POST',
+                'token' => self::VALID_TOKEN,
+                'path' => '/slices/update',
+                'file' => __DIR__ . '/responses/POST.slices-insert.unexpected.http',
+                'body' => static fn (string $body): bool => strpos($body, '"id":"update-unexpected"') !== false,
+            ],
+            [
+                'method' => 'GET',
+                'token' => self::VALID_TOKEN,
+                'path' => '/slices/example-slice',
+                'file' => __DIR__ . '/responses/GET.slice.example.http',
+            ],
+            [
+                'method' => 'GET',
+                'token' => self::VALID_TOKEN,
+                'path' => '/slices/not-found',
+                'file' => __DIR__ . '/responses/GET.slices.not-found.http',
+            ],
+            [
+                'method' => 'POST',
+                'token' => self::VALID_TOKEN,
+                'path' => '/slices/update',
+                'file' => __DIR__ . '/responses/POST.slices-update.http',
+                'body' => static fn (string $body): bool => strpos($body, '"was":"updated"') !== false,
+            ],
+            [
+                'method' => 'GET',
+                'token' => self::VALID_TOKEN,
+                'path' => '/slices/insert-save',
+                'file' => __DIR__ . '/responses/GET.slices.not-found.http',
+            ],
+            [
+                'method' => 'POST',
+                'token' => self::VALID_TOKEN,
+                'path' => '/slices/insert',
+                'file' => __DIR__ . '/responses/POST.slices-insert.http',
+                'body' => static fn (string $body): bool => strpos($body, '"id":"insert-save"') !== false,
+            ],
+            [
+                'method' => 'DELETE',
+                'token' => self::VALID_TOKEN,
+                'path' => '/slices/delete-me',
+                'file' => __DIR__ . '/responses/DELETE.slices.http',
+            ],
+            [
+                'method' => 'DELETE',
+                'token' => self::VALID_TOKEN,
+                'path' => '/slices/delete-weird',
+                'file' => __DIR__ . '/responses/POST.slices-insert.unexpected.http',
+            ],
         ];
 
         $match = null;
@@ -182,7 +281,7 @@ final class MockServer
         }
 
         if (! $match) {
-            return null;
+            return new TextResponse('The request did not match any fixtures' . PHP_EOL, 999);
         }
 
         return Serializer::fromString(file_get_contents($match['file']));

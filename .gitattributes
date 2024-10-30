@@ -1,3 +1,11 @@
+#
+# *.http files in /test/ are response fixtures and should have CRLF line endings
+#
+/test/Integration/responses/*.http	text eol=crlf
+
+#
+# Ignores
+#
 /.cache/ export-ignore
 /.github/ export-ignore
 /.laminas-ci/ export-ignore

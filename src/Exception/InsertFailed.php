@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Prismic\DocumentType\Exception;
 
 use Prismic\DocumentType\Definition;
+use Prismic\DocumentType\SharedSlice;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -21,6 +22,21 @@ final class InsertFailed extends ResponseError
             sprintf(
                 'Failed to insert the definition "%s" because one already exists with that identifier',
                 $definition->id(),
+            ),
+            $request,
+            $response,
+        );
+    }
+
+    public static function forSlice(
+        SharedSlice $definition,
+        RequestInterface $request,
+        ResponseInterface $response,
+    ): self {
+        return self::withHttpExchange(
+            sprintf(
+                'Failed to insert the shared slice "%s" because one already exists with that identifier',
+                $definition->id,
             ),
             $request,
             $response,
