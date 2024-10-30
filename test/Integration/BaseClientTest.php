@@ -6,6 +6,7 @@ namespace Prismic\DocumentType\Test\Integration;
 
 use Laminas\Diactoros\StreamFactory;
 use Laminas\Diactoros\UriFactory;
+use PHPUnit\Framework\Attributes\Depends;
 use Prismic\DocumentType\BaseClient;
 use Prismic\DocumentType\Definition;
 use Prismic\DocumentType\Exception\AuthenticationFailed;
@@ -16,11 +17,13 @@ use Prismic\DocumentType\Exception\RequestFailure;
 use Prismic\DocumentType\Exception\ResponseError;
 use Prismic\DocumentType\Exception\UnexpectedStatusCode;
 use Prismic\DocumentType\Exception\UpdateFailed;
+use Prismic\DocumentType\SharedSlice;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 
 use function assert;
 use function count;
+use function PHPUnit\Framework\assertStringContainsString;
 
 class BaseClientTest extends MockServerTestCase
 {
@@ -401,5 +404,174 @@ class BaseClientTest extends MockServerTestCase
         assert($last instanceof RequestInterface);
         $header = $last->getHeaderLine('repository');
         self::assertStringContainsString('new-repository', $header);
+    }
+
+    public function testSuccessfulFetchOfAllSlices(): void
+    {
+        $results = $this->client->fetchAllSharedSlices();
+        self::assertGreaterThan(0, count($results));
+        self::assertContainsOnlyInstancesOf(SharedSlice::class, $results);
+        foreach ($results as $key => $definition) {
+            self::assertEquals($definition->id, $key);
+        }
+    }
+
+    public function testCreateSharedSlice(): void
+    {
+        $this->client->createSharedSlice(SharedSlice::new(
+            'example-slice',
+            '{"id":"example-slice"}',
+        ));
+
+        $last = $this->httpClient()->lastRequest();
+        assert($last instanceof RequestInterface);
+        self::assertStringContainsString('/slices/insert', $last->getUri()->getPath());
+    }
+
+    public function testCreateDuplicateSharedSlice(): void
+    {
+        $this->expectException(InsertFailed::class);
+        $this->expectExceptionMessage('duplicate-slice');
+        $this->client->createSharedSlice(SharedSlice::new(
+            'duplicate-slice',
+            '{"id":"duplicate-slice"}',
+        ));
+    }
+
+    public function testCreateInvalidSharedSlice(): void
+    {
+        $this->expectException(InvalidDefinition::class);
+        $this->expectExceptionMessage('slice definition was rejected');
+        $this->client->createSharedSlice(SharedSlice::new(
+            'invalid-slice',
+            '{"id":"invalid-slice"}',
+        ));
+    }
+
+    public function testCreateSharedSliceWithUnexpectedResponse(): void
+    {
+        $this->expectException(UnexpectedStatusCode::class);
+        $this->expectExceptionMessage('Expected the HTTP response code 201');
+        $this->client->createSharedSlice(SharedSlice::new(
+            'unexpected',
+            '{"id":"unexpected"}',
+        ));
+    }
+
+    public function testUpdateSharedSlice(): void
+    {
+        $this->client->updateSharedSlice(SharedSlice::new(
+            'update',
+            '{"id":"update"}',
+        ));
+
+        $last = $this->httpClient()->lastRequest();
+        assert($last instanceof RequestInterface);
+        self::assertStringContainsString('/slices/update', $last->getUri()->getPath());
+    }
+
+    public function testUpdateSharedSliceWithInvalidSpec(): void
+    {
+        $this->expectException(InvalidDefinition::class);
+        $this->expectExceptionMessage('slice definition was rejected');
+        $this->client->updateSharedSlice(SharedSlice::new(
+            'update-invalid',
+            '{"id":"update-invalid"}',
+        ));
+    }
+
+    public function testUpdateSharedSliceThatDoesNotExist(): void
+    {
+        $this->expectException(UpdateFailed::class);
+        $this->expectExceptionMessage('update-missing');
+        $this->client->updateSharedSlice(SharedSlice::new(
+            'update-missing',
+            '{"id":"update-missing"}',
+        ));
+    }
+
+    public function testUpdateSliceWithUnexpectedResponse(): void
+    {
+        $this->expectException(UnexpectedStatusCode::class);
+        $this->expectExceptionMessage('Expected the HTTP response code 204');
+        $this->client->updateSharedSlice(SharedSlice::new(
+            'update-unexpected',
+            '{"id":"update-unexpected"}',
+        ));
+    }
+
+    public function testGetSliceById(): SharedSlice
+    {
+        $slice = $this->client->getSharedSlice('example-slice');
+        self::assertSame('example-slice', $slice->id);
+
+        return $slice;
+    }
+
+    public function testGetSliceWhenNotFound(): void
+    {
+        $this->expectException(DefinitionNotFound::class);
+        $this->expectExceptionMessage('not-found');
+        $this->client->getSharedSlice('not-found');
+    }
+
+    #[Depends('testGetSliceById')]
+    public function testSaveDoesNothingWhenTheSliceHasNotChanged(SharedSlice $slice): void
+    {
+        $this->client->saveSharedSlice($slice);
+
+        $last = $this->httpClient()->lastRequest();
+        assert($last instanceof RequestInterface);
+        self::assertSame('GET', $last->getMethod());
+        self::assertStringContainsString('/slices/example-slice', $last->getUri()->getPath());
+    }
+
+    public function testSaveUpdatesWhenTheSliceIsChanged(): void
+    {
+        $this->client->saveSharedSlice(SharedSlice::new(
+            'example-slice',
+            '{"id":"example-slice", "was":"updated"}',
+        ));
+
+        $last = $this->httpClient()->lastRequest();
+        assert($last instanceof RequestInterface);
+        self::assertStringContainsString('/slices/update', $last->getUri()->getPath());
+    }
+
+    public function testSaveInsertsWhenTheSliceIsNotFound(): void
+    {
+        $this->client->saveSharedSlice(SharedSlice::new(
+            'insert-save',
+            '{"id":"insert-save"}',
+        ));
+
+        $last = $this->httpClient()->lastRequest();
+        assert($last instanceof RequestInterface);
+        self::assertStringContainsString('/slices/insert', $last->getUri()->getPath());
+    }
+
+    public function testDeleteSharedSlice(): void
+    {
+        $this->client->deleteSharedSlice('delete-me');
+
+        $last = $this->httpClient()->lastRequest();
+        assert($last instanceof RequestInterface);
+        self::assertSame('DELETE', $last->getMethod());
+        self::assertStringContainsString('/slices/delete-me', $last->getUri()->getPath());
+    }
+
+    public function testDeleteWithUnexpectedResponse(): void
+    {
+        try {
+            $this->client->deleteSharedSlice('delete-weird');
+            self::fail('Exception expected');
+        } catch (UnexpectedStatusCode $e) {
+            assertStringContainsString('Expected the HTTP response code 204', $e->getMessage());
+        }
+
+        $last = $this->httpClient()->lastRequest();
+        assert($last instanceof RequestInterface);
+        self::assertSame('DELETE', $last->getMethod());
+        self::assertStringContainsString('/slices/delete-weird', $last->getUri()->getPath());
     }
 }

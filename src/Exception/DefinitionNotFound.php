@@ -22,4 +22,16 @@ final class DefinitionNotFound extends ResponseError
             $response,
         );
     }
+
+    public static function forSharedSlice(
+        string $id,
+        RequestInterface $request,
+        ResponseInterface $response,
+    ): self {
+        return self::withHttpExchange(
+            sprintf('A shared slice with the id "%s" cannot be found', $id),
+            $request,
+            $response,
+        );
+    }
 }

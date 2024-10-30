@@ -1,0 +1,7 @@
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 423
+Connection: close
+Date: Wed, 30 Oct 2024 11:48:19 GMT
+
+{"id":"example-slice","type":"SharedSlice","name":"Example Slice","description":"An example of a shared slice","variations":[{"id":"default","name":"Default","docURL":"","version":"","description":"The default variant","primary":{"text":{"type":"Number","config":{"min":0,"max":10}}},"items":{},"imageUrl":"https://images.prismic.io/slice-machine/621a5ec4-0387-4bc5-9860-2dd46cbc07cd_default_ss.png?auto=compress,format"}]}

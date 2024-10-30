@@ -1,0 +1,14 @@
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+Content-Length: 124
+Connection: close
+Date: Wed, 30 Oct 2024 12:14:35 GMT
+X-Cache: Error from cloudfront
+
+
+Invalid Paths:
+PATH: |0|/variations|0||0|/docURL
+VALUE: undefined
+
+PATH: |0|/variations|0||0|/version
+VALUE: undefined

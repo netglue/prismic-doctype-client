@@ -17,4 +17,13 @@ final class InvalidDefinition extends ResponseError
             $response,
         );
     }
+
+    public static function invalidSlice(RequestInterface $request, ResponseInterface $response): self
+    {
+        return self::withHttpExchange(
+            'The slice definition was rejected because it (most likely) has validation errors',
+            $request,
+            $response,
+        );
+    }
 }
