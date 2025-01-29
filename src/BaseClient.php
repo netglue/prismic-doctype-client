@@ -21,7 +21,7 @@ use Psr\Http\Message\UriFactoryInterface;
 
 use function sprintf;
 
-final class BaseClient implements Client, SharedSliceManagementClient
+final readonly class BaseClient implements Client, SharedSliceManagementClient
 {
     private const DEFAULT_BASE_URI = 'https://customtypes.prismic.io';
 

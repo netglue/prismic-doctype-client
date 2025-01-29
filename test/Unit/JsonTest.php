@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Prismic\DocumentType\Test\Unit;
 
 use JsonSerializable;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Prismic\DocumentType\Exception\AssertionFailed;
 use Prismic\DocumentType\Exception\JsonError;
@@ -45,11 +46,8 @@ class JsonTest extends TestCase
         ];
     }
 
-    /**
-     * @param class-string<Throwable> $expectedException
-     *
-     * @dataProvider decodeArrayInvalidData
-     */
+    /** @param class-string<Throwable> $expectedException */
+    #[DataProvider('decodeArrayInvalidData')]
     public function testArrayDecodingFailures(string $json, string $expectedException): void
     {
         $this->expectException($expectedException);

@@ -6,6 +6,9 @@ namespace Prismic\DocumentType\Test\Smoke;
 
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Depends;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Prismic\DocumentType\BaseClient;
 use Prismic\DocumentType\Definition;
@@ -23,10 +26,8 @@ use function iterator_to_array;
 use function strlen;
 use function uniqid;
 
-/**
- * @psalm-suppress MissingConstructor
- * @group LiveAPI
- */
+/** @psalm-suppress MissingConstructor */
+#[Group('LiveAPI')]
 final class BaseClientTest extends TestCase
 {
     protected BaseClient $client;
@@ -76,7 +77,7 @@ final class BaseClientTest extends TestCase
         ];
     }
 
-    /** @dataProvider invalidRepositoryDataProvider */
+    #[DataProvider('invalidRepositoryDataProvider')]
     public function testThatAuthorisationCanFail(string $repo, string $token): void
     {
         $client = $this->client->withAlternativeRepository($repo, $token);
@@ -127,7 +128,7 @@ final class BaseClientTest extends TestCase
         return $fetched;
     }
 
-    /** @depends testThatANewDefinitionCanBeSaved */
+    #[Depends('testThatANewDefinitionCanBeSaved')]
     public function testThatAttemptingToInsertAnExistingDefinitionIsExceptional(Definition $definition): void
     {
         $this->expectException(InsertFailed::class);
@@ -135,7 +136,7 @@ final class BaseClientTest extends TestCase
         $this->client->createDefinition($definition);
     }
 
-    /** @depends testThatANewDefinitionCanBeSaved */
+    #[Depends('testThatANewDefinitionCanBeSaved')]
     public function testThatADefinitionCanBeDisabled(Definition $definition): Definition
     {
         $update = $definition->withActivationStatus(false);
@@ -149,7 +150,7 @@ final class BaseClientTest extends TestCase
         return $fetched;
     }
 
-    /** @depends testThatADefinitionCanBeDisabled */
+    #[Depends('testThatADefinitionCanBeDisabled')]
     public function testThatADefinitionCanBeDeleted(Definition $definition): void
     {
         $this->client->deleteDefinition($definition->id());
@@ -157,10 +158,8 @@ final class BaseClientTest extends TestCase
         $this->client->getDefinition($definition->id());
     }
 
-    /**
-     * @depends testThatADefinitionCanBeDisabled
-     * @depends testThatADefinitionCanBeDeleted
-     */
+    #[Depends('testThatADefinitionCanBeDisabled')]
+    #[Depends('testThatADefinitionCanBeDeleted')]
     public function testThatYouCannotUpdateADefinitionThatDoesNotExist(Definition $definition): void
     {
         $this->expectException(UpdateFailed::class);
@@ -192,7 +191,7 @@ final class BaseClientTest extends TestCase
         return $retrieved;
     }
 
-    /** @depends testThatCallingSaveWillInsertADefinition */
+    #[Depends('testThatCallingSaveWillInsertADefinition')]
     public function testThatCallingSaveWithAnExistingDefinitionWillIssueAnUpdate(Definition $definition): Definition
     {
         $changed = $definition->withNewLabel('New Label');
@@ -204,7 +203,7 @@ final class BaseClientTest extends TestCase
         return $retrieved;
     }
 
-    /** @depends testThatCallingSaveWillInsertADefinition */
+    #[Depends('testThatCallingSaveWillInsertADefinition')]
     public function testThatUpdatingWithInvalidSpecWillCauseAnError(Definition $definition): void
     {
         $changed = $definition->withAlteredPayload('{"Main":{"actually": "valid json, but invalid spec for Prismic"}}');
@@ -212,10 +211,8 @@ final class BaseClientTest extends TestCase
         $this->client->saveDefinition($changed);
     }
 
-    /**
-     * @depends testThatCallingSaveWillInsertADefinition
-     * @depends testThatUpdatingWithInvalidSpecWillCauseAnError
-     */
+    #[Depends('testThatCallingSaveWillInsertADefinition')]
+    #[Depends('testThatUpdatingWithInvalidSpecWillCauseAnError')]
     public function testCleanUpTheDefinitionInTheRepo(Definition $definition): void
     {
         $this->expectNotToPerformAssertions();

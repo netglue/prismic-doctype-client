@@ -331,10 +331,8 @@ class BaseClientTest extends MockServerTestCase
         }
     }
 
-    /**
-     * @depends testASingleDefinitionCanBeRetrieved
-     * @depends testAValidUpdateWillCauseNoExceptions
-     */
+    #[Depends('testASingleDefinitionCanBeRetrieved')]
+    #[Depends('testAValidUpdateWillCauseNoExceptions')]
     public function testThatWhenTheTypeExistsAnUpdateWillBeIssuedInSave(): void
     {
         $this->client->saveDefinition(Definition::new(
@@ -365,10 +363,8 @@ class BaseClientTest extends MockServerTestCase
         self::assertStringContainsString('/customtypes/example', $last->getUri()->getPath());
     }
 
-    /**
-     * @depends testAnExceptionIsThrownWhenTheDefinitionIsNotFound
-     * @depends testValidInsertCausesNoExceptions
-     */
+    #[Depends('testAnExceptionIsThrownWhenTheDefinitionIsNotFound')]
+    #[Depends('testValidInsertCausesNoExceptions')]
     public function testThatSaveWillCatchNotFoundErrorsAndPerformAnInsert(): void
     {
         $this->client->saveDefinition(Definition::new(
@@ -384,7 +380,7 @@ class BaseClientTest extends MockServerTestCase
         self::assertStringContainsString('/customtypes/insert', $last->getUri()->getPath());
     }
 
-    /** @depends testASingleDefinitionCanBeRetrieved */
+    #[Depends('testASingleDefinitionCanBeRetrieved')]
     public function testThatTheRepositoryHeaderIsSetInTheRequest(): void
     {
         $this->client->getDefinition('example');
@@ -395,7 +391,7 @@ class BaseClientTest extends MockServerTestCase
         self::assertStringContainsString(self::EXPECTED_REPOSITORY, $header);
     }
 
-    /** @depends testThatTheRepositoryHeaderIsSetInTheRequest */
+    #[Depends('testThatTheRepositoryHeaderIsSetInTheRequest')]
     public function testThatAClientCanBeGeneratedForADifferentRepository(): void
     {
         $other = $this->client->withAlternativeRepository('new-repository', MockServer::VALID_TOKEN);

@@ -12,8 +12,10 @@ use React\EventLoop\Loop;
 use React\Http\HttpServer;
 use React\Socket\SocketServer;
 
+use function assert;
 use function file_get_contents;
 use function is_callable;
+use function is_string;
 use function sprintf;
 use function strpos;
 use function strtoupper;
@@ -284,6 +286,9 @@ final class MockServer
             return new TextResponse('The request did not match any fixtures' . PHP_EOL, 999);
         }
 
-        return Serializer::fromString(file_get_contents($match['file']));
+        $contents = file_get_contents($match['file']);
+        assert(is_string($contents));
+
+        return Serializer::fromString($contents);
     }
 }

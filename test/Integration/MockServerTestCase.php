@@ -32,7 +32,7 @@ abstract class MockServerTestCase extends TestCase
     public static function setUpBeforeClass(): void
     {
         self::$httpClient = new HttpClient(
-            new Client(null, null, [CURLOPT_CONNECTTIMEOUT_MS => 100]),
+            new Client(null, null, [CURLOPT_CONNECTTIMEOUT_MS => 1000]),
         );
         self::$requestFactory = new RequestFactory();
         self::$serverPort = 8089;
@@ -51,6 +51,7 @@ abstract class MockServerTestCase extends TestCase
         }
 
         self::$serverProcess->terminate();
+        usleep(100000);
     }
 
     protected static function apiServerUri(): string
