@@ -37,7 +37,10 @@
         "vimeo/psalm": "^6.0.0"
     },
     "conflict": {
-        "php-http/httplug": "<2.4.1"
+        "php-http/httplug": "<2.4.1",
+        "shish/safe": "<2.6.4",
+        "sanmai/pipeline": "<6.12",
+        "symfony/options-resolver": "<7.2"
     },
     "config": {
         "sort-packages": true,
