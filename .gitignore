@@ -3,3 +3,4 @@
 /.cache/
 !/.cache/.gitkeep
 phpunit.xml
+rector.php

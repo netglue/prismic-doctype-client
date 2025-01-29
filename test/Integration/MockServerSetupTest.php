@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Integration;
 
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use Prismic\DocumentType\Test\Integration\MockServerTestCase;
 
 use function sprintf;
 
 final class MockServerSetupTest extends MockServerTestCase
 {
+    #[RunInSeparateProcess]
     public function testThatTheServerIsRunningAndRespondsWithTheExpectedOutput(): void
     {
         $request = $this->requestFactory()->createRequest('GET', sprintf('%s/ping', self::apiServerUri()));

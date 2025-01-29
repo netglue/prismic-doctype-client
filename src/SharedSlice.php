@@ -6,15 +6,17 @@ namespace Prismic\DocumentType;
 
 use function json_encode;
 
-final class SharedSlice
+use const JSON_THROW_ON_ERROR;
+
+final readonly class SharedSlice
 {
     /**
      * @param non-empty-string $id
      * @param non-empty-string $json
      */
     private function __construct(
-        public readonly string $id,
-        public readonly string $json,
+        public string $id,
+        public string $json,
     ) {
     }
 
@@ -33,7 +35,7 @@ final class SharedSlice
         Assert::keyExists($payload, 'id');
         Assert::stringNotEmpty($payload['id']);
 
-        return new self($payload['id'], json_encode($payload));
+        return new self($payload['id'], json_encode($payload, JSON_THROW_ON_ERROR));
     }
 
     public function equals(SharedSlice $other): bool

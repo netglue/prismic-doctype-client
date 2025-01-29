@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Prismic\DocumentType\Test\Unit;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Prismic\DocumentType\Definition;
 use Prismic\DocumentType\Exception\AssertionFailed;
@@ -152,11 +153,8 @@ final class DefinitionTest extends TestCase
         ];
     }
 
-    /**
-     * @param array<string, mixed> $input
-     *
-     * @dataProvider invalidDefinitionArrayProvider
-     */
+    /** @param array<string, mixed> $input */
+    #[DataProvider('invalidDefinitionArrayProvider')]
     public function testAssertionErrorIsThrownForInvalidDefinitionStructure(array $input): void
     {
         $this->expectException(AssertionFailed::class);
