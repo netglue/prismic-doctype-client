@@ -24,7 +24,7 @@
     "require-dev": {
         "ext-curl": "*",
         "doctrine/coding-standard": "^12.0",
-        "infection/infection": "^0.29.10",
+        "infection/infection": "^0.30.0",
         "laminas/laminas-diactoros": "^3.5.0",
         "php-http/curl-client": "^2.3.3",
         "phpunit/phpunit": "^11.5.4",
