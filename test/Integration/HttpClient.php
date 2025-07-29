@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Prismic\DocumentType\Test\Integration;
 
+use Override;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -18,6 +19,7 @@ final class HttpClient implements ClientInterface
     {
     }
 
+    #[Override]
     public function sendRequest(RequestInterface $request): ResponseInterface
     {
         $this->lastRequest = $request;

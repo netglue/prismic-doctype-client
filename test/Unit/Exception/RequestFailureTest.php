@@ -10,7 +10,7 @@ use Prismic\DocumentType\Exception\AssertionFailed;
 use Prismic\DocumentType\Exception\RequestFailure;
 use Psr\Http\Client\ClientExceptionInterface;
 
-class RequestFailureTest extends TestCase
+final class RequestFailureTest extends TestCase
 {
     public function testThatTheRequestMustBeProvidedToAccessOne(): void
     {

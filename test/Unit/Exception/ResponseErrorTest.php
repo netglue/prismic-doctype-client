@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Prismic\DocumentType\Exception\AssertionFailed;
 use Prismic\DocumentType\Exception\InvalidDefinition;
 
-class ResponseErrorTest extends TestCase
+final class ResponseErrorTest extends TestCase
 {
     public function testThatTheResponseMustBeProvidedToAccessOne(): void
     {

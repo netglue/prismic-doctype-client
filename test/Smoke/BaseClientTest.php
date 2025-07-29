@@ -6,6 +6,7 @@ namespace Prismic\DocumentType\Test\Smoke;
 
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
+use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\Attributes\Group;
@@ -32,6 +33,7 @@ final class BaseClientTest extends TestCase
 {
     protected BaseClient $client;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -13,7 +13,7 @@ interface SharedSliceManagementClient
     /**
      * Return a list of the Shared Slices found in the remote repo
      *
-     * @return iterable<string, SharedSlice>&Countable
+     * @return (iterable<string, SharedSlice>)&Countable
      */
     public function fetchAllSharedSlices(): iterable;
 

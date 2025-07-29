@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Prismic\DocumentType\Exception\UnexpectedStatusCode;
 use Psr\Http\Message\ServerRequestInterface;
 
-class UnexpectedStatusCodeTest extends TestCase
+final class UnexpectedStatusCodeTest extends TestCase
 {
     public function testThatTheExpectedCodeIsReported(): void
     {
