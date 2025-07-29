@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Prismic\DocumentType;
 
 use JsonSerializable;
+use Override;
 use Prismic\DocumentType\Exception\AssertionFailed;
 
 /** @psalm-immutable */
@@ -63,6 +64,7 @@ final class Definition implements JsonSerializable
     }
 
     /** @return array{id: string, label: string, repeatable: bool, status: bool, json: array<array-key, mixed>} */
+    #[Override]
     public function jsonSerialize(): array
     {
         return [

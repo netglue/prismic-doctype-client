@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Prismic\DocumentType\Test\Unit;
 
+use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Prismic\DocumentType\Definition;
@@ -18,6 +19,7 @@ final class DefinitionTest extends TestCase
 {
     private Definition $type;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

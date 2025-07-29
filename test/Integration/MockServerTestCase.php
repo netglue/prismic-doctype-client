@@ -6,6 +6,7 @@ namespace Prismic\DocumentType\Test\Integration;
 
 use Http\Client\Curl\Client;
 use Laminas\Diactoros\RequestFactory;
+use Override;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestFactoryInterface;
 use React\ChildProcess\Process;
@@ -22,6 +23,7 @@ abstract class MockServerTestCase extends TestCase
     private static HttpClient $httpClient;
     private static RequestFactory $requestFactory;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -29,6 +31,7 @@ abstract class MockServerTestCase extends TestCase
         $this->httpClient()->clearState();
     }
 
+    #[Override]
     public static function setUpBeforeClass(): void
     {
         self::$httpClient = new HttpClient(
@@ -44,6 +47,7 @@ abstract class MockServerTestCase extends TestCase
         usleep(100000);
     }
 
+    #[Override]
     public static function tearDownAfterClass(): void
     {
         foreach (self::$serverProcess->pipes as $pipe) {

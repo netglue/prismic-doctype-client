@@ -18,7 +18,7 @@ use const JSON_ERROR_DEPTH;
 use const JSON_THROW_ON_ERROR;
 use const STDOUT;
 
-class JsonTest extends TestCase
+final class JsonTest extends TestCase
 {
     public function testAnArrayCanBeEncoded(): void
     {

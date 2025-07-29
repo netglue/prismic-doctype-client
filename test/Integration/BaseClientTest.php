@@ -6,6 +6,7 @@ namespace Prismic\DocumentType\Test\Integration;
 
 use Laminas\Diactoros\StreamFactory;
 use Laminas\Diactoros\UriFactory;
+use Override;
 use PHPUnit\Framework\Attributes\Depends;
 use Prismic\DocumentType\BaseClient;
 use Prismic\DocumentType\Definition;
@@ -25,12 +26,13 @@ use function assert;
 use function count;
 use function PHPUnit\Framework\assertStringContainsString;
 
-class BaseClientTest extends MockServerTestCase
+final class BaseClientTest extends MockServerTestCase
 {
     private const EXPECTED_REPOSITORY = 'expected-repo-name';
 
     private BaseClient $client;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -96,6 +98,7 @@ class BaseClientTest extends MockServerTestCase
         self::assertGreaterThan(0, count($definitions));
         self::assertContainsOnlyInstancesOf(Definition::class, $definitions);
         foreach ($definitions as $key => $definition) {
+            self::assertIsString($key);
             self::assertEquals($definition->id(), $key);
         }
     }
@@ -408,6 +411,7 @@ class BaseClientTest extends MockServerTestCase
         self::assertGreaterThan(0, count($results));
         self::assertContainsOnlyInstancesOf(SharedSlice::class, $results);
         foreach ($results as $key => $definition) {
+            self::assertIsString($key);
             self::assertEquals($definition->id, $key);
         }
     }

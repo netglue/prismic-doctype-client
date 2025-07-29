@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Prismic\DocumentType;
 
+use Override;
 use Prismic\DocumentType\Exception\AuthenticationFailed;
 use Prismic\DocumentType\Exception\DefinitionNotFound;
 use Prismic\DocumentType\Exception\InsertFailed;
@@ -51,6 +52,7 @@ final readonly class BaseClient implements Client, SharedSliceManagementClient
         );
     }
 
+    #[Override]
     public function getDefinition(string $id): Definition
     {
         $request = $this->request('GET', sprintf('/customtypes/%s', $id));
@@ -66,6 +68,7 @@ final readonly class BaseClient implements Client, SharedSliceManagementClient
     }
 
     /** @inheritDoc */
+    #[Override]
     public function fetchAllDefinitions(): iterable
     {
         $response = $this->send(
@@ -83,6 +86,7 @@ final readonly class BaseClient implements Client, SharedSliceManagementClient
         return $list;
     }
 
+    #[Override]
     public function deleteDefinition(string $id): void
     {
         /**
@@ -143,6 +147,7 @@ final readonly class BaseClient implements Client, SharedSliceManagementClient
         }
     }
 
+    #[Override]
     public function saveDefinition(Definition $definition): void
     {
         try {
@@ -190,6 +195,7 @@ final readonly class BaseClient implements Client, SharedSliceManagementClient
     }
 
     /** @inheritDoc */
+    #[Override]
     public function fetchAllSharedSlices(): iterable
     {
         $response = $this->send(
@@ -249,6 +255,7 @@ final readonly class BaseClient implements Client, SharedSliceManagementClient
         }
     }
 
+    #[Override]
     public function saveSharedSlice(SharedSlice $slice): void
     {
         try {
@@ -266,6 +273,7 @@ final readonly class BaseClient implements Client, SharedSliceManagementClient
         $this->updateSharedSlice($slice);
     }
 
+    #[Override]
     public function getSharedSlice(string $id): SharedSlice
     {
         $request = $this->request('GET', sprintf('/slices/%s', $id));
@@ -280,6 +288,7 @@ final readonly class BaseClient implements Client, SharedSliceManagementClient
         );
     }
 
+    #[Override]
     public function deleteSharedSlice(string $id): void
     {
         $request = $this->request('DELETE', sprintf('/slices/%s', $id));

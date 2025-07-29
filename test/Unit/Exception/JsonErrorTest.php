@@ -11,7 +11,7 @@ use Prismic\DocumentType\Exception\JsonError;
 
 use const JSON_ERROR_DEPTH;
 
-class JsonErrorTest extends TestCase
+final class JsonErrorTest extends TestCase
 {
     public function testThatAskingForTheJsonStringIsExceptionalWhenItIsNotTheResultOfADecodeError(): void
     {
