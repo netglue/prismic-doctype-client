@@ -23,7 +23,7 @@
     },
     "require-dev": {
         "ext-curl": "*",
-        "doctrine/coding-standard": "^12.0",
+        "doctrine/coding-standard": "^13.0",
         "infection/infection": "^0.31.0",
         "laminas/laminas-diactoros": "^3.6.0",
         "php-http/curl-client": "^2.3.3",
@@ -39,7 +39,9 @@
         "php-http/httplug": "<2.4.1",
         "shish/safe": "<2.6.4",
         "sanmai/pipeline": "<6.12",
-        "symfony/options-resolver": "<7.2"
+        "symfony/options-resolver": "<7.2",
+        "amphp/dns": "<2.1.2",
+        "amphp/socket": "<2.3.1"
     },
     "config": {
         "sort-packages": true,
