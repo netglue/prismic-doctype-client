@@ -1,7 +1,8 @@
 #
 # *.http files in /test/ are response fixtures and should have CRLF line endings
 #
-/test/Integration/responses/*.http	text eol=crlf
+* text=auto
+*.http text eol=crlf
 
 #
 # Ignores
