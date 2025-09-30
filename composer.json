@@ -23,7 +23,7 @@
     },
     "require-dev": {
         "ext-curl": "*",
-        "doctrine/coding-standard": "^13.0",
+        "doctrine/coding-standard": "^14.0",
         "infection/infection": "^0.31.0",
         "laminas/laminas-diactoros": "^3.6.0",
         "php-http/curl-client": "^2.3.3",
