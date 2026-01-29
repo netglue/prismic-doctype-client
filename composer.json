@@ -27,7 +27,7 @@
         "infection/infection": "^0.32.0",
         "laminas/laminas-diactoros": "^3.6.0",
         "php-http/curl-client": "^2.3.3",
-        "phpunit/phpunit": "^11.5.42",
+        "phpunit/phpunit": "^12.0.0",
         "psalm/plugin-phpunit": "^0.19.5",
         "react/child-process": "^0.6.6",
         "react/http": "^1.11",
