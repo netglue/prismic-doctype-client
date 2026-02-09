@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "26626cc8a94b943442c4134788fa3684",
+    "content-hash": "5087718712d9a703452db75e0de6ddb5",
     "packages": [
         {
             "name": "php-http/discovery",
@@ -5076,12 +5076,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "7ea2d110787f6807213e27a1255c6b858ad99d89"
+                "reference": "c9bc175c224c05354a704903e6f38c31776d40e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/7ea2d110787f6807213e27a1255c6b858ad99d89",
-                "reference": "7ea2d110787f6807213e27a1255c6b858ad99d89",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/c9bc175c224c05354a704903e6f38c31776d40e3",
+                "reference": "c9bc175c224c05354a704903e6f38c31776d40e3",
                 "shasum": ""
             },
             "conflict": {
@@ -5112,6 +5112,7 @@
                 "amphp/artax": "<1.0.6|>=2,<2.0.6",
                 "amphp/http": "<=1.7.2|>=2,<=2.1",
                 "amphp/http-client": ">=4,<4.4",
+                "amphp/http-server": ">=2.0.0.0-RC1-dev,<2.1.10|>=3.0.0.0-beta1,<3.4.4",
                 "anchorcms/anchor-cms": "<=0.12.7",
                 "andreapollastri/cipi": "<=3.1.15",
                 "andrewhaine/silverstripe-form-capture": ">=0.2,<=0.2.3|>=1,<1.0.2|>=2,<2.2.5",
@@ -6087,7 +6088,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-02-05T22:08:29+00:00"
+            "time": "2026-02-09T09:24:23+00:00"
         },
         {
             "name": "sanmai/di-container",
@@ -9041,7 +9042,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "~8.2.0 || ~8.3 || ~8.4",
+        "php": "~8.2.0 || ~8.3 || ~8.4 || ~8.5",
         "ext-json": "*"
     },
     "platform-dev": {
