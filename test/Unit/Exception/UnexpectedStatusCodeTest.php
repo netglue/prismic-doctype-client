@@ -15,7 +15,7 @@ final class UnexpectedStatusCodeTest extends TestCase
     {
         $error = UnexpectedStatusCode::withExpectedCode(
             123,
-            $this->createMock(ServerRequestInterface::class),
+            $this->createStub(ServerRequestInterface::class),
             new TextResponse('Foo', 234),
         );
 
