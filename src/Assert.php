@@ -8,6 +8,7 @@ use Override;
 use Prismic\DocumentType\Exception\AssertionFailed;
 use Webmozart\Assert\Assert as WebmozartAssert;
 
+/** @internal */
 final class Assert extends WebmozartAssert
 {
     /**
